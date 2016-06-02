@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai;
+package edu.jhu.isi.grothsahai.util;
 
 import org.springframework.stereotype.Service;
 

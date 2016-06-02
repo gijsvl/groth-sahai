@@ -1,5 +1,6 @@
-package edu.jhu.isi.grothsahai;
+package edu.jhu.isi.grothsahai.util;
 
+import edu.jhu.isi.grothsahai.BaseTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
