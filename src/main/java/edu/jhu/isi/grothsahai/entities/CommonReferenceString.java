@@ -64,10 +64,10 @@ public class CommonReferenceString {
         final Element v2 = q2.mulZn(t2).getImmutable();
 
         final QuadraticField[] b = new QuadraticField[3];
-        b[1] = new QuadraticField(new SecureRandom(), g[1]);
-        b[2] = new QuadraticField(new SecureRandom(), g[2]);
-        final QuadraticField partBt = new QuadraticField(new SecureRandom(), g[0]);
-        b[0] = new QuadraticField(new SecureRandom(), partBt);
+        b[1] = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[1]);
+        b[2] = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[2]);
+        final QuadraticField partBt = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[0]);
+        b[0] = new QuadraticField<QuadraticField, QuadraticElement>(new SecureRandom(), partBt);
         final CustomQuadraticElement<Element> bigU11 = new CustomQuadraticElement<Element>(b[1], p1, q1, pairing);
         final CustomQuadraticElement<Element> bigU12 = new CustomQuadraticElement<Element>(b[1], u1, v1, pairing);
         final CustomQuadraticElement<Element> bigU21 = new CustomQuadraticElement<Element>(b[2], p2, q2, pairing);
@@ -89,14 +89,14 @@ public class CommonReferenceString {
     public QuarticElement iotaT(final ProblemType type, final Element x) {
         switch (type) {
             case PAIRING_PRODUCT:
-                return new QuarticElement((QuadraticField) g[0], g[0].newOneElement(),
+                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
                         g[0].newOneElement(), g[0].newOneElement(), x);
             case MULTI_SCALAR_G1:
-                return new QuarticElement((QuadraticField) g[0], g[0].newOneElement(),
+                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
                         g[0].newOneElement(), ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[2].getX()),
                         ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[2].getY()));
             case MULTI_SCALAR_G2:
-                return new QuarticElement((QuadraticField) g[0], g[0].newOneElement(),
+                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
                         ((CustomQuadraticElement) w[1].getX()).pair((CustomQuadraticElement) x), g[0].newOneElement(),
                         ((CustomQuadraticElement) w[1].getY()).pair((CustomQuadraticElement) x));
             case QUADRATIC:
