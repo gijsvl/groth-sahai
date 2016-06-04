@@ -40,6 +40,7 @@ public class CommonReferenceString {
     }
 
     public static CommonReferenceString generate() {
+        // TODO: make pairing flexible (and include as parameter)
         final int discriminant = 9563;
         final PairingParametersGenerator parametersGenerator = new PBCTypeDCurveGenerator(discriminant);
         final PairingParameters params = parametersGenerator.generate();
@@ -81,12 +82,14 @@ public class CommonReferenceString {
             throw new IllegalArgumentException("Index must be 1 or 2.");
         }
         if (g[index].equals(zr)) {
+            //TODO: test this branch
             return u[index][2].sub(w[index]).mulZn(x);
         }
         return new CustomQuadraticElement<Element>(b[index], g[index].newZeroElement(), x, pairing);
     }
 
     public QuarticElement iotaT(final ProblemType type, final Element x) {
+        // TODO: child classes for the different types
         switch (type) {
             case PAIRING_PRODUCT:
                 return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
@@ -104,7 +107,7 @@ public class CommonReferenceString {
         }
         throw new IllegalStateException("ProblemType not covered: " + type);
     }
-
+//    TODO: commit for other ProblemTypes
 //    public QuadraticElement commit(final int index, final ZrElement x, final ZrElement randomness) {
 //        return iota(index, x).add(u[index][1].mulZn(randomness));
 //    }
