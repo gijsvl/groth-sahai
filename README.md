@@ -7,6 +7,7 @@ An implementation of the Groth-Sahai NIZK protocol
 * Install PBC on your machine (Hopefully we can solve this in time)
 
 https://crypto.stanford.edu/pbc/
+
 * Setup a shared library
 
 http://gas.dia.unisa.it/projects/jpbc/docs/pbcwrapper.html
