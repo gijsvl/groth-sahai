@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai.entity;
+package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import org.junit.Test;
@@ -21,8 +21,10 @@ public class CommonReferenceStringTest extends BaseTest {
         notNull(CRS.getZr());
         notNull(CRS.getG1());
         notNull(CRS.getG2());
+        notNull(CRS.getGT());
         notNull(CRS.getB1());
         notNull(CRS.getB2());
+        notNull(CRS.getBT());
     }
 
     @Test
@@ -50,35 +52,35 @@ public class CommonReferenceStringTest extends BaseTest {
     @Test(expected = IllegalArgumentException.class)
     public void testIota_wrongIndex() {
         final CommonReferenceString CRS = CommonReferenceString.generate();
-        CRS.iota(2, CRS.getG1().newRandomElement());
+        CRS.iota(3, CRS.getG1().newRandomElement());
     }
 
     @Test
     public void testIota_firstElementIsZero() {
         final CommonReferenceString CRS = CommonReferenceString.generate();
-        isTrue(CRS.iota(0, CRS.getG1().newRandomElement()).getX().isZero());
-        isTrue(!CRS.iota(0, CRS.getG1().newRandomElement()).getY().isZero());
-        isTrue(CRS.iota(1, CRS.getG2().newRandomElement()).getX().isZero());
-        isTrue(!CRS.iota(1, CRS.getG2().newRandomElement()).getY().isZero());
+        isTrue(CRS.iota(1, CRS.getG1().newRandomElement()).getX().isZero());
+        isTrue(!CRS.iota(1, CRS.getG1().newRandomElement()).getY().isZero());
+        isTrue(CRS.iota(2, CRS.getG2().newRandomElement()).getX().isZero());
+        isTrue(!CRS.iota(2, CRS.getG2().newRandomElement()).getY().isZero());
     }
 
     @Test
     public void testIota_mapsToCorrectField() {
         final CommonReferenceString CRS = CommonReferenceString.generate();
-        isTrue(CRS.iota(0, CRS.getG1().newRandomElement()).getField().equals(CRS.getB1()));
-        isTrue(CRS.iota(1, CRS.getG2().newRandomElement()).getField().equals(CRS.getB2()));
+        isTrue(CRS.iota(1, CRS.getG1().newRandomElement()).getField().equals(CRS.getB1()));
+        isTrue(CRS.iota(2, CRS.getG2().newRandomElement()).getField().equals(CRS.getB2()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCommit2_wrongIndex() {
         final CommonReferenceString CRS = CommonReferenceString.generate();
-        CRS.commit(2, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement());
+        CRS.commit(3, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement());
     }
 
     @Test
     public void testCommit_mapsToCorrectField() {
         final CommonReferenceString CRS = CommonReferenceString.generate();
-        isTrue(CRS.commit(0, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB1()));
-        isTrue(CRS.commit(1, CRS.getG2().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB2()));
+        isTrue(CRS.commit(1, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB1()));
+        isTrue(CRS.commit(2, CRS.getG2().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB2()));
     }
 }
