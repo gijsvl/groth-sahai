@@ -5,9 +5,13 @@ An implementation of the Groth-Sahai NIZK protocol
 ### Setup ###
 
 * PBC
-Install PBC on your machine (Hopefully we can solve this in time)
+
+** Install PBC on your machine (Hopefully we can solve this in time)
+
 https://crypto.stanford.edu/pbc/
-Setup a shared library
+
+** Setup a shared library
+
 http://gas.dia.unisa.it/projects/jpbc/docs/pbcwrapper.html
 
 ### Run tests ###
