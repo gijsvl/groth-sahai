@@ -1,4 +1,4 @@
 package edu.jhu.isi.grothsahai.entities;
 
-public interface CommonReferenceString {
+public interface Statement {
 }

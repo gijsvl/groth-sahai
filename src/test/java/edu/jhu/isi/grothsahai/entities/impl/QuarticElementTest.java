@@ -1,6 +1,8 @@
-package edu.jhu.isi.grothsahai.entities;
+package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
+import edu.jhu.isi.grothsahai.entities.impl.CustomQuadraticElement;
+import edu.jhu.isi.grothsahai.entities.impl.QuarticElement;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;

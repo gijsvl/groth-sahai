@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai.entities;
+package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import org.junit.Test;
@@ -6,10 +6,10 @@ import org.junit.Test;
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
-public class CommonReferenceStringTest extends BaseTest {
+public class CommonReferenceStringImplTest extends BaseTest {
     @Test
     public void canGenerateRandomCRS() {
-        final CommonReferenceString CRS =  CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate();
         isTrue(!CRS.getU11().isZero());
         isTrue(!CRS.getU11().isOne());
         isTrue(!CRS.getU12().isZero());
@@ -29,7 +29,7 @@ public class CommonReferenceStringTest extends BaseTest {
 
     @Test
     public void canGenerateRandomCRS_allElementsInBi() {
-        final CommonReferenceString CRS =  CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate();
         isTrue(CRS.getU11().getField().equals(CRS.getB1()));
         isTrue(CRS.getU12().getField().equals(CRS.getB1()));
         isTrue(CRS.getU21().getField().equals(CRS.getB2()));
@@ -38,7 +38,7 @@ public class CommonReferenceStringTest extends BaseTest {
 
     @Test
     public void canGenerateRandomCRS_allSubElementsInGi() {
-        final CommonReferenceString CRS =  CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate();
         isTrue(CRS.getU11().getX().getField().equals(CRS.getG1()));
         isTrue(CRS.getU11().getY().getField().equals(CRS.getG1()));
         isTrue(CRS.getU12().getX().getField().equals(CRS.getG1()));
@@ -51,13 +51,13 @@ public class CommonReferenceStringTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testIota_wrongIndex() {
-        final CommonReferenceString CRS = CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate();
         CRS.iota(3, CRS.getG1().newRandomElement());
     }
 
     @Test
     public void testIota_firstElementIsZero() {
-        final CommonReferenceString CRS = CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate();
         isTrue(CRS.iota(1, CRS.getG1().newRandomElement()).getX().isZero());
         isTrue(!CRS.iota(1, CRS.getG1().newRandomElement()).getY().isZero());
         isTrue(CRS.iota(2, CRS.getG2().newRandomElement()).getX().isZero());
@@ -66,20 +66,20 @@ public class CommonReferenceStringTest extends BaseTest {
 
     @Test
     public void testIota_mapsToCorrectField() {
-        final CommonReferenceString CRS = CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate();
         isTrue(CRS.iota(1, CRS.getG1().newRandomElement()).getField().equals(CRS.getB1()));
         isTrue(CRS.iota(2, CRS.getG2().newRandomElement()).getField().equals(CRS.getB2()));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCommit2_wrongIndex() {
-        final CommonReferenceString CRS = CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate();
         CRS.commit(3, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement());
     }
 
     @Test
     public void testCommit_mapsToCorrectField() {
-        final CommonReferenceString CRS = CommonReferenceString.generate();
+        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate();
         isTrue(CRS.commit(1, CRS.getG1().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB1()));
         isTrue(CRS.commit(2, CRS.getG2().newRandomElement(), CRS.getZr().newRandomElement(), CRS.getZr().newRandomElement()).getField().equals(CRS.getB2()));
     }

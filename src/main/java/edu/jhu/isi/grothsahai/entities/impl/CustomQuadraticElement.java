@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai.entities;
+package edu.jhu.isi.grothsahai.entities.impl;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
