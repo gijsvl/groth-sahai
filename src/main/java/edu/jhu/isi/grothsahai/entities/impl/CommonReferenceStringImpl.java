@@ -78,7 +78,16 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return new CommonReferenceStringImpl(bigU11, bigU12, bigU21, bigU22, zr, g, b, pairing);
     }
 
-    public QuadraticElement iota(final int index, final Element x) {
+    public Vector iota(final int index, final Vector xs) {
+        final QuadraticElement[] result = new QuadraticElement[xs.getLength()];
+        for (int i = 0; i < xs.getLength(); i++) {
+            result[i] = iota(index, xs.get(i));
+        }
+
+        return new Vector(result);
+    }
+
+    QuadraticElement iota(final int index, final Element x) {
         if (index != 1 && index != 2) {
             throw new IllegalArgumentException("Index must be 1 or 2.");
         }
@@ -89,7 +98,16 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return new CustomQuadraticElement<Element>(b[index], g[index].newZeroElement(), x, pairing);
     }
 
-    public QuarticElement iotaT(final ProblemType type, final Element x) {
+    public Vector iotaT(final ProblemType type, final Vector xs) {
+        final QuarticElement[] result = new QuarticElement[xs.getLength()];
+        for (int i = 0; i < xs.getLength(); i++) {
+            result[i] = iotaT(type, xs.get(i));
+        }
+
+        return new Vector(result);
+    }
+
+    QuarticElement iotaT(final ProblemType type, final Element x) {
         // TODO: child classes for the different types
         switch (type) {
             case PAIRING_PRODUCT:
@@ -125,6 +143,10 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return u[1][2];
     }
 
+    public Vector getU1() {
+        return new Vector(u[1]);
+    }
+
     QuadraticElement getU21() {
         return u[2][1];
     }
@@ -133,7 +155,11 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return u[2][2];
     }
 
-    ZrField getZr() {
+    public Vector getU2() {
+        return new Vector(u[2]);
+    }
+
+    public ZrField getZr() {
         return zr;
     }
 
@@ -159,6 +185,10 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
 
     Field getGT() {
         return g[0];
+    }
+
+    public Pairing getPairing() {
+        return pairing;
     }
 
     private static Element newNonZeroNonOneElement(Field field) {

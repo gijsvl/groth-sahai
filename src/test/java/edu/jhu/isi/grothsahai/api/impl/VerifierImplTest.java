@@ -5,9 +5,9 @@ import edu.jhu.isi.grothsahai.api.Verifier;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
+import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
 public class VerifierImplTest extends BaseTest {
@@ -17,12 +17,12 @@ public class VerifierImplTest extends BaseTest {
         notNull(verifier);
     }
 
-    @Test(expected = NotImplementedException.class)
+    @Test
     public void testVerify() {
         final Verifier verifier = new VerifierImpl();
         final CommonReferenceString crs = null;
         final Statement statement = null;
         final Proof proof = null;
-        verifier.verify(crs, statement, proof);
+        isTrue(!verifier.verify(crs, statement, proof));
     }
 }

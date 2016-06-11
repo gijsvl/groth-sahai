@@ -5,7 +5,6 @@ import edu.jhu.isi.grothsahai.api.Prover;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
 import static org.springframework.util.Assert.notNull;
@@ -17,7 +16,7 @@ public class ProverImplTest extends BaseTest {
         notNull(prover);
     }
 
-    @Test(expected = NotImplementedException.class)
+    @Test(expected = NullPointerException.class)
     public void testProof() {
         final Prover prover = new ProverImpl();
         final CommonReferenceString crs = null;
