@@ -98,16 +98,7 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return new CustomQuadraticElement<Element>(b[index], g[index].newZeroElement(), x, pairing);
     }
 
-    public Vector iotaT(final ProblemType type, final Vector xs) {
-        final QuarticElement[] result = new QuarticElement[xs.getLength()];
-        for (int i = 0; i < xs.getLength(); i++) {
-            result[i] = iotaT(type, xs.get(i));
-        }
-
-        return new Vector(result);
-    }
-
-    QuarticElement iotaT(final ProblemType type, final Element x) {
+    public QuarticElement iotaT(final ProblemType type, final Element x) {
         // TODO: child classes for the different types
         switch (type) {
             case PAIRING_PRODUCT:

@@ -1,6 +1,7 @@
 package edu.jhu.isi.grothsahai.entities.impl;
 
 import it.unisa.dia.gas.jpbc.Element;
+import it.unisa.dia.gas.jpbc.Pairing;
 
 import java.util.Arrays;
 
@@ -16,6 +17,9 @@ public class Vector {
     }
 
     public Vector add(final Vector v) {
+        if (elements.length != v.getLength()) {
+            throw new RuntimeException("Illegal vector dimensions.");
+        }
         Element[] resultElements = new Element[elements.length];
         for (int i = 0; i < elements.length; i++) {
             resultElements[i] = elements[i].add(v.get(i));
@@ -28,11 +32,25 @@ public class Vector {
     }
 
     public Vector sub(final Vector v) {
+        if (elements.length != v.getLength()) {
+            throw new RuntimeException("Illegal vector dimensions.");
+        }
         Element[] resultElements = new Element[elements.length];
         for (int i = 0; i < elements.length; i++) {
             resultElements[i] = elements[i].sub(v.get(i));
         }
         return new Vector(resultElements);
+    }
+
+    public Element pair(final Vector v, final Pairing pairing) {
+        if (getLength() != v.getLength()) {
+            throw new RuntimeException("Illegal vector dimensions.");
+        }
+        Element result = pairing.getGT().newZeroElement();
+        for (int i = 0; i < getLength(); i++) {
+            result.add(pairing.pairing(get(i), v.get(i)));
+        }
+        return result;
     }
 
     @Override
