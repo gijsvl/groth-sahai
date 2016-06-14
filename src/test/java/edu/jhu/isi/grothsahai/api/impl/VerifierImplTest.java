@@ -17,7 +17,7 @@ public class VerifierImplTest extends BaseTest {
         notNull(verifier);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testVerify() {
         final Verifier verifier = new VerifierImpl();
         final CommonReferenceString crs = null;
