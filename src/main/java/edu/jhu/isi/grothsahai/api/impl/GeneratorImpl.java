@@ -31,17 +31,21 @@ public class GeneratorImpl implements Generator {
                     "but should receive the statement from the prover at generation time.");
         }
         final CommonReferenceStringImpl crsImpl = (CommonReferenceStringImpl) crs;
-        Element[] aElements = new Element[5];
-        Element[] xElements = new Element[5];
-        Element[] bElements = new Element[5];
-        Element[] yElements = new Element[5];
-        for (int i = 0; i < 5; i++) {
+        final int bLength = (int) Math.round(Math.random() * 10);
+        final int aLength = (int) Math.round(Math.random() * 10);
+        Element[] aElements = new Element[aLength];
+        Element[] yElements = new Element[aLength];
+        for (int i = 0; i < aLength; i++) {
             aElements[i] = crsImpl.getG1().newRandomElement().getImmutable();
-            xElements[i] = crsImpl.getG1().newRandomElement().getImmutable();
-            bElements[i] = crsImpl.getG2().newRandomElement().getImmutable();
             yElements[i] = crsImpl.getG2().newRandomElement().getImmutable();
         }
-        final Matrix gamma = Matrix.random(crsImpl.getZr(), 5, 5);
+        Element[] bElements = new Element[bLength];
+        Element[] xElements = new Element[bLength];
+        for (int i = 0; i < bLength; i++) {
+            bElements[i] = crsImpl.getG2().newRandomElement().getImmutable();
+            xElements[i] = crsImpl.getG1().newRandomElement().getImmutable();
+        }
+        final Matrix gamma = Matrix.random(crsImpl.getZr(), bLength, aLength);
 
         final Vector a = new Vector(aElements);
         final Vector b = new Vector(bElements);
