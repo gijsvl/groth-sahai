@@ -1,8 +1,6 @@
 package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
-import edu.jhu.isi.grothsahai.entities.impl.CustomQuadraticElement;
-import edu.jhu.isi.grothsahai.entities.impl.QuarticElement;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -63,5 +61,38 @@ public class CustomQuadraticElementTest extends BaseTest {
                 new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g1),
                 element1, element2, pairing);
         elementLeft.pair(elementRight);
+    }
+
+    @Test
+    public void testMulZn() throws Exception {
+        final Pairing pairing = createPairing();
+        final Field g1 = pairing.getG1();
+        final Element element1 = g1.newRandomElement();
+        final Element element2 = g1.newRandomElement();
+        final CustomQuadraticElement<Element> element = new CustomQuadraticElement<Element>(
+                new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g1),
+                element1, element2, pairing);
+
+        final Element zrElement = pairing.getZr().newRandomElement();
+        final CustomQuadraticElement mulZn = element.mulZn(zrElement);
+
+        assertEquals(element1.mulZn(zrElement), mulZn.getX());
+        assertEquals(element2.mulZn(zrElement), mulZn.getY());
+    }
+
+    @Test
+    public void testDuplicate() throws Exception {
+        final Pairing pairing = createPairing();
+        final Field g1 = pairing.getG1();
+        final Element element1 = g1.newRandomElement();
+        final Element element2 = g1.newRandomElement();
+        final CustomQuadraticElement<Element> element = new CustomQuadraticElement<Element>(
+                new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g1),
+                element1, element2, pairing);
+
+        final QuadraticElement duplicate = element.duplicate();
+
+        assertEquals(element1, duplicate.getX());
+        assertEquals(element2, duplicate.getY());
     }
 }

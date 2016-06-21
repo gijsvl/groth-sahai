@@ -9,10 +9,10 @@ import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
-import it.unisa.dia.gas.plaf.jpbc.field.z.ZrElement;
 import it.unisa.dia.gas.plaf.jpbc.field.z.ZrField;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeDCurveGenerator;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.security.SecureRandom;
 
@@ -20,24 +20,24 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
     private final ZrField zr;
     private final QuadraticField[] b;
     private final Field[] g;
-    private final CustomQuadraticElement[] w = new CustomQuadraticElement[3];
-    private final QuadraticElement[][] u = new QuadraticElement[3][3];
+    private final CustomQuadraticElement[] w = new CustomQuadraticElement[2];
+    private final QuadraticElement[][] u = new QuadraticElement[2][2];
     private final Pairing pairing;
 
     public CommonReferenceStringImpl(final QuadraticElement u11, final QuadraticElement u12,
                                      final QuadraticElement u21, final QuadraticElement u22,
                                      final Field zr, final Field[] g, final QuadraticField[] b,
                                      final Pairing pairing) {
-        this.u[1][1] = u11;
-        this.u[1][2] = u12;
-        this.u[2][1] = u21;
-        this.u[2][2] = u22;
+        this.u[0][0] = u11;
+        this.u[0][1] = u12;
+        this.u[1][0] = u21;
+        this.u[1][1] = u22;
         this.zr = (ZrField) zr;
         this.g = g;
         this.b = b;
         this.pairing = pairing;
-        w[1] = new CustomQuadraticElement<Element>(b[1], g[1].newZeroElement(), u[1][2].getX(), pairing);
-        w[2] = new CustomQuadraticElement<Element>(b[2], g[2].newZeroElement(), u[2][2].getX(), pairing);
+        w[0] = new CustomQuadraticElement<Element>(b[1], g[1].newZeroElement().getImmutable(), u[0][1].getX(), pairing);
+        w[1] = new CustomQuadraticElement<Element>(b[2], g[2].newZeroElement().getImmutable(), u[1][1].getX(), pairing);
     }
 
     public static CommonReferenceStringImpl generate() {
@@ -91,10 +91,11 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         if (index != 1 && index != 2) {
             throw new IllegalArgumentException("Index must be 1 or 2.");
         }
-        if (g[index].equals(zr)) {
-            //TODO: test this branch
-            return u[index][2].sub(w[index]).mulZn(x);
-        }
+//        final int indexMin1 = index - 1;
+//        if (g[index].equals(zr)) {
+//            //TODO: test this branch
+//            return u[indexMin1][1].sub(w[indexMin1]).mulZn(x);
+//        }
         return new CustomQuadraticElement<Element>(b[index], g[index].newZeroElement(), x, pairing);
     }
 
@@ -102,52 +103,44 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         // TODO: child classes for the different types
         switch (type) {
             case PAIRING_PRODUCT:
-                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
+                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
                         g[0].newOneElement(), g[0].newOneElement(), x);
-            case MULTI_SCALAR_G1:
-                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
-                        g[0].newOneElement(), ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[2].getX()),
-                        ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[2].getY()));
-            case MULTI_SCALAR_G2:
-                return new QuarticElement<Element>((QuadraticField) g[0], g[0].newOneElement(),
-                        ((CustomQuadraticElement) w[1].getX()).pair((CustomQuadraticElement) x), g[0].newOneElement(),
-                        ((CustomQuadraticElement) w[1].getY()).pair((CustomQuadraticElement) x));
-            case QUADRATIC:
-                return new QuarticElement(w[1].pair(w[2]).powZn(x));
+//            case MULTI_SCALAR_G1:
+//                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
+//                        g[0].newOneElement(), ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[1].getX()),
+//                        ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[1].getY()));
+//            case MULTI_SCALAR_G2:
+//                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
+//                        ((CustomQuadraticElement) w[0].getX()).pair((CustomQuadraticElement) x), g[0].newOneElement(),
+//                        ((CustomQuadraticElement) w[0].getY()).pair((CustomQuadraticElement) x));
+//            case QUADRATIC:
+//                return new QuarticElement(w[0].pair(w[1]).powZn(x));
         }
-        throw new IllegalStateException("ProblemType not covered: " + type);
-    }
-//    TODO: commit for other ProblemTypes
-//    public QuadraticElement commit(final int index, final ZrElement x, final ZrElement randomness) {
-//        return iota(index, x).add(u[index][1].mulZn(randomness));
-//    }
-
-    public QuadraticElement commit(final int index, final Element x, final ZrElement randomness1, final ZrElement randomness2) {
-        return iota(index, x).add(u[index][1].mulZn(randomness1)).add(u[index][2].mulZn(randomness2));
+        throw new NotImplementedException("ProblemType not covered: " + type);
     }
 
     QuadraticElement getU11() {
-        return u[1][1];
+        return u[0][0];
     }
 
     QuadraticElement getU12() {
-        return u[1][2];
+        return u[0][1];
     }
 
     public Vector getU1() {
-        return new Vector(u[1]);
+        return new Vector(u[0]);
     }
 
     QuadraticElement getU21() {
-        return u[2][1];
+        return u[1][0];
     }
 
     QuadraticElement getU22() {
-        return u[2][2];
+        return u[1][1];
     }
 
     public Vector getU2() {
-        return new Vector(u[2]);
+        return new Vector(u[1]);
     }
 
     public ZrField getZr() {
@@ -166,11 +159,11 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return b[0];
     }
 
-    Field getG1() {
+    public Field getG1() {
         return g[1];
     }
 
-    Field getG2() {
+    public Field getG2() {
         return g[2];
     }
 

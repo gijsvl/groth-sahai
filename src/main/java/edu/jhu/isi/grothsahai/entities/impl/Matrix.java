@@ -3,8 +3,6 @@ package edu.jhu.isi.grothsahai.entities.impl;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 
-import java.util.Arrays;
-
 public class Matrix {
     private Element[][] elements;
 
@@ -16,12 +14,8 @@ public class Matrix {
         Element[][] elements = new Element[m][n];
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
-                elements[i][j] = field.newRandomElement();
+                elements[i][j] = field.newRandomElement().getImmutable();
         return new Matrix(elements);
-    }
-
-    public void set(final int rowIndex, final int colIndex, final Element element) {
-        elements[rowIndex][colIndex] = element;
     }
 
     public Element get(final int rowIndex, final int colIndex) {
@@ -39,13 +33,13 @@ public class Matrix {
     public Matrix getTranspose() {
         int m = elements.length;
         int n = elements[0].length;
-        Element[][] elementsT = elements;
+        Element[][] elementsT = new Element[n][m];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                elementsT[j][i] = elements[i][j];
+                elementsT[j][i] = elements[i][j].getImmutable();
             }
         }
-        return new Matrix(elements);
+        return new Matrix(elementsT);
     }
 
     public Matrix multiply(final Matrix B) {
@@ -54,12 +48,15 @@ public class Matrix {
         final int mB = B.getNumberOfRows();
         final int nB = B.getNumberOfCols();
         if (nA != mB) {
-            throw new RuntimeException("Illegal matrix dimensions.");
+            throw new IllegalArgumentException("Illegal matrix dimensions.");
         }
         final Element[][] C = new Element[mA][nB];
         for (int i = 0; i < mA; i++) {
             for (int j = 0; j < nB; j++) {
                 for (int k = 0; k < nA; k++) {
+                    if (C[i][j] == null) {
+                        C[i][j] = elements[0][0].getField().newZeroElement().getImmutable();
+                    }
                     C[i][j] = C[i][j].add(elements[i][k].mul(B.get(k, j)));
                 }
             }
@@ -67,38 +64,21 @@ public class Matrix {
         return new Matrix(C);
     }
 
-    public Vector multiply(final Vector x) {
+    public Vector multiply(final Vector v) {
         final int m = elements.length;
         final int n = elements[0].length;
-        if (x.getLength() != n) {
-            throw new RuntimeException("Illegal matrix dimensions.");
+        if (v.getLength() != n) {
+            throw new IllegalArgumentException("Illegal matrix dimensions.");
         }
         final Element[] y = new Element[m];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                y[i] = y[i].add(elements[i][j].mul(x.get(j)));
+                if (y[i] == null) {
+                    y[i] = v.get(0).getField().newZeroElement();
+                }
+                y[i] = v.get(j).mulZn(elements[i][j]).add(y[i]);
             }
         }
         return new Vector(y);
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Matrix matrix = (Matrix) o;
-        return Arrays.equals(elements, matrix.elements);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(elements);
-    }
-
-    @Override
-    public String toString() {
-        return "Matrix{" +
-                "elements=" + Arrays.toString(elements) +
-                '}';
     }
 }

@@ -16,12 +16,12 @@ public class VerifierImpl implements Verifier {
         final StatementImpl statementImpl = (StatementImpl) statement;
         final CommonReferenceStringImpl crsImpl = (CommonReferenceStringImpl) crs;
 
-        final Element lhs = crsImpl.iota(1, statementImpl.getA()).pair(proofImpl.getD(),crsImpl.getPairing())
-                .add(proofImpl.getC().pair(crsImpl.iota(2, statementImpl.getB()), crsImpl.getPairing()))
-                .add(proofImpl.getC().pair(statementImpl.getGamma().multiply(proofImpl.getD()), crsImpl.getPairing()));
+        final Element lhs = crsImpl.iota(1, statementImpl.getA()).pairInB(proofImpl.getD(),crsImpl.getPairing())
+                .add(proofImpl.getC().pairInB(crsImpl.iota(2, statementImpl.getB()), crsImpl.getPairing()))
+                .add(proofImpl.getC().pairInB(statementImpl.getGamma().multiply(proofImpl.getD()), crsImpl.getPairing()));
         final Element rhs = crsImpl.iotaT(ProblemType.PAIRING_PRODUCT, statementImpl.getT())
-                .add(crsImpl.getU1().pair(proofImpl.getPi(), crsImpl.getPairing()))
-                .add(proofImpl.getTheta().pair(crsImpl.getU2(), crsImpl.getPairing()));
+                .add(crsImpl.getU1().pairInB(proofImpl.getPi(), crsImpl.getPairing()))
+                .add(proofImpl.getTheta().pairInB(crsImpl.getU2(), crsImpl.getPairing()));
 
         return lhs.isEqual(rhs);
     }

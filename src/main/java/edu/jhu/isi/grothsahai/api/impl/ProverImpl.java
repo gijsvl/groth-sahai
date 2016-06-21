@@ -20,7 +20,7 @@ public class ProverImpl implements Prover {
 
         final Matrix R = Matrix.random(crsImpl.getZr(), witnessImpl.getX().getLength(), 2);
         final Matrix S = Matrix.random(crsImpl.getZr(), witnessImpl.getY().getLength(), 2);
-        final Matrix T = Matrix.random(crsImpl.getZr(), witnessImpl.getY().getLength(), witnessImpl.getX().getLength());
+        final Matrix T = Matrix.random(crsImpl.getZr(), 2, 2);
         final Vector c = crsImpl.iota(1, witnessImpl.getX()).add(R.multiply(crsImpl.getU1()));
         final Vector d = crsImpl.iota(2, witnessImpl.getY()).add(S.multiply(crsImpl.getU2()));
 
@@ -33,6 +33,6 @@ public class ProverImpl implements Prover {
                         .multiply(crsImpl.iota(1, witnessImpl.getX())))
                 .add(T.multiply(crsImpl.getU1()));
 
-        return new ProofImpl(c,d, pi, theta);
+        return new ProofImpl(c, d, pi, theta);
     }
 }

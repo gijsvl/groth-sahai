@@ -21,7 +21,7 @@ public class GrothSahaiIT {
         final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
 
         final CommonReferenceString crs = generator.generateCRS();
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness();
+        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(crs);
         final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
         isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
     }

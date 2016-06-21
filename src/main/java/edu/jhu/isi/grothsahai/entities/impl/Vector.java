@@ -2,8 +2,11 @@ package edu.jhu.isi.grothsahai.entities.impl;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.plaf.jpbc.field.quadratic.ImmutableQuadraticElement;
+import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
+import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 
-import java.util.Arrays;
+import java.security.SecureRandom;
 
 public class Vector {
     private Element[] elements;
@@ -18,7 +21,7 @@ public class Vector {
 
     public Vector add(final Vector v) {
         if (elements.length != v.getLength()) {
-            throw new RuntimeException("Illegal vector dimensions.");
+            throw new IllegalArgumentException("Illegal vector dimensions.");
         }
         Element[] resultElements = new Element[elements.length];
         for (int i = 0; i < elements.length; i++) {
@@ -33,43 +36,46 @@ public class Vector {
 
     public Vector sub(final Vector v) {
         if (elements.length != v.getLength()) {
-            throw new RuntimeException("Illegal vector dimensions.");
+            throw new IllegalArgumentException("Illegal vector dimensions.");
         }
         Element[] resultElements = new Element[elements.length];
         for (int i = 0; i < elements.length; i++) {
-            resultElements[i] = elements[i].sub(v.get(i));
+            resultElements[i] = elements[i].sub(v.get(i)).getImmutable();
         }
         return new Vector(resultElements);
     }
 
     public Element pair(final Vector v, final Pairing pairing) {
         if (getLength() != v.getLength()) {
-            throw new RuntimeException("Illegal vector dimensions.");
+            throw new IllegalArgumentException("Illegal vector dimensions.");
         }
         Element result = pairing.getGT().newZeroElement();
         for (int i = 0; i < getLength(); i++) {
-            result.add(pairing.pairing(get(i), v.get(i)));
+            result = result.add(pairing.pairing(get(i), v.get(i)));
         }
         return result;
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Vector vector = (Vector) o;
-        return Arrays.equals(elements, vector.elements);
+    public Element pairInB(final Vector v, final Pairing pairing) {
+        if (getLength() != v.getLength()) {
+            throw new IllegalArgumentException("Illegal vector dimensions.");
+        }
+        Element result = new QuarticElement(new QuadraticField(new SecureRandom(), pairing.getGT()),
+                pairing.getGT().newZeroElement(), pairing.getGT().newZeroElement(),
+                pairing.getGT().newZeroElement(), pairing.getGT().newZeroElement());
+        for (int i = 0; i < getLength(); i++) {
+            if (v.get(i).getClass().equals(ImmutableQuadraticElement.class)) {
+                v.set(i, new CustomQuadraticElement((QuadraticElement) v.get(i), pairing));
+            }
+            if (get(i).getClass().equals(ImmutableQuadraticElement.class)) {
+                set(i, new CustomQuadraticElement((QuadraticElement) get(i), pairing));
+            }
+            result = result.add(((CustomQuadraticElement) get(i)).pair((CustomQuadraticElement) v.get(i)));
+        }
+        return result.getImmutable();
     }
 
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(elements);
-    }
-
-    @Override
-    public String toString() {
-        return "Vector{" +
-                "elements=" + Arrays.toString(elements) +
-                '}';
+    public void set(final int i, final Element element) {
+        elements[i] = element;
     }
 }
