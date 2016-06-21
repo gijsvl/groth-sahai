@@ -38,7 +38,7 @@ public class GeneratorImplTest extends BaseTest {
         final GeneratorImpl generator = new GeneratorImpl(Role.VERIFIER);
 
         final CommonReferenceString crs = generator.generateCRS();
-        generator.generateStatementAndWitness((CommonReferenceStringImpl) crs);
+        generator.generateStatementAndWitness(crs);
     }
 
     @Test
@@ -67,5 +67,6 @@ public class GeneratorImplTest extends BaseTest {
         assertEquals(a.pair(y, crs.getPairing())
                 .add(x.pair(b, crs.getPairing()))
                 .add(x.pair(gamma.multiply(y), crs.getPairing())).getImmutable(), t);
+        assertEquals(crs.getPairing().getGT(), t.getField());
     }
 }

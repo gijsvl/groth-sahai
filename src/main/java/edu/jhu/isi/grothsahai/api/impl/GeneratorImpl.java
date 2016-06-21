@@ -50,7 +50,7 @@ public class GeneratorImpl implements Generator {
 
         final Element t = a.pair(y, crsImpl.getPairing())
                 .add(x.pair(b, crsImpl.getPairing()))
-                .add(x.pair(gamma.multiply(y), crsImpl.getPairing())).getImmutable();
+                .add(x.pair(gamma.multiply(y), crsImpl.getPairing()));
         final StatementImpl statement = new StatementImpl(a, b, gamma, t);
         final WitnessImpl witness = new WitnessImpl(x, y);
 

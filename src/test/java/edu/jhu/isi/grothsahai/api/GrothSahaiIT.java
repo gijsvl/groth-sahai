@@ -7,13 +7,11 @@ import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.enums.ImplementationType;
 import edu.jhu.isi.grothsahai.enums.Role;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.apache.commons.lang3.Validate.isTrue;
 
 public class GrothSahaiIT {
-    @Ignore
     @Test
     public void testValidProof() {
         final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);

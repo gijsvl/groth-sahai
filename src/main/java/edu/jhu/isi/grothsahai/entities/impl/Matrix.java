@@ -74,9 +74,9 @@ public class Matrix {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (y[i] == null) {
-                    y[i] = v.get(0).getField().newZeroElement();
+                    y[i] = v.get(0).getField().newZeroElement().getImmutable();
                 }
-                y[i] = v.get(j).mulZn(elements[i][j]).add(y[i]);
+                y[i] = y[i].add(v.get(j).mulZn(elements[i][j]));
             }
         }
         return new Vector(y);
