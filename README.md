@@ -13,8 +13,22 @@ https://crypto.stanford.edu/pbc/
 http://gas.dia.unisa.it/projects/jpbc/docs/pbcwrapper.html
 
 ### Run tests ###
+* mvn clean test
 
-That's all for now
+### Implementation details ###
+
+```
+#!java
+
+final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
+final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
+final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+
+final CommonReferenceString crs = generator.generateCRS();
+final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(crs);
+final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
+isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
+```
 
 ### References ###
 Groth, Jens and Sahai, Amit, **Efficient Non-interactive Proof Systems for Bilinear Groups**, *Advances in Cryptology -- EUROCRYPT 2008: 27th Annual International Conference on the Theory and Applications of Cryptographic Techniques, Istanbul, Turkey, April 13-17, 2008. Proceedings (2008), Springer Berlin Heidelberg*
