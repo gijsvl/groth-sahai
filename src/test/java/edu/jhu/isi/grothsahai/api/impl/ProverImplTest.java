@@ -5,12 +5,12 @@ import edu.jhu.isi.grothsahai.api.Prover;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
+import edu.jhu.isi.grothsahai.entities.impl.Pair;
 import edu.jhu.isi.grothsahai.entities.impl.ProofImpl;
 import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
 import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

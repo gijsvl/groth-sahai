@@ -2,6 +2,7 @@ package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.enums.ProblemType;
+import edu.jhu.isi.grothsahai.exceptions.NotImplementedException;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -12,7 +13,6 @@ import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 import it.unisa.dia.gas.plaf.jpbc.field.z.ZrField;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeDCurveGenerator;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.security.SecureRandom;
 

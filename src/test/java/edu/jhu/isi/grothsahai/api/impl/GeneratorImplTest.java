@@ -7,12 +7,12 @@ import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
 import edu.jhu.isi.grothsahai.entities.impl.Matrix;
+import edu.jhu.isi.grothsahai.entities.impl.Pair;
 import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
 import edu.jhu.isi.grothsahai.entities.impl.Vector;
 import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Element;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

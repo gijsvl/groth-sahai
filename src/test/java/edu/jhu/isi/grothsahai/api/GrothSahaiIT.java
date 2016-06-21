@@ -4,12 +4,12 @@ import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
+import edu.jhu.isi.grothsahai.entities.impl.Pair;
 import edu.jhu.isi.grothsahai.enums.ImplementationType;
 import edu.jhu.isi.grothsahai.enums.Role;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
-import static org.apache.commons.lang3.Validate.isTrue;
+import static org.springframework.util.Assert.isTrue;
 
 public class GrothSahaiIT {
     @Test

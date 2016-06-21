@@ -2,9 +2,9 @@ package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.enums.ProblemType;
+import edu.jhu.isi.grothsahai.exceptions.NotImplementedException;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
