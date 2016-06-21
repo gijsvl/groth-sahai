@@ -49,5 +49,14 @@
         </dependency>
     </dependencies>
 
-
+    <build>
+        <resources>
+            <resource>
+                <directory>.</directory>
+                <includes>
+                    <include>lib/**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
