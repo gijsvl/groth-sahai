@@ -13,6 +13,7 @@ import edu.jhu.isi.grothsahai.entities.impl.Vector;
 import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Element;
+import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -26,10 +27,18 @@ public class GeneratorImplTest extends BaseTest {
     }
 
     @Test
+    public void testGeneratePairing() {
+        final Generator generator = new GeneratorImpl(Role.PROVER);
+
+        final Pairing pairing = generator.generatePairing();
+        notNull(pairing);
+    }
+
+    @Test
     public void testGenerateCRS() {
         final Generator generator = new GeneratorImpl(Role.PROVER);
 
-        final CommonReferenceString crs = generator.generateCRS();
+        final CommonReferenceString crs = generator.generateCRS(generator.generatePairing());
         notNull(crs);
     }
 
@@ -37,16 +46,17 @@ public class GeneratorImplTest extends BaseTest {
     public void testGenerateStatementAndWitness_asVerifier() {
         final GeneratorImpl generator = new GeneratorImpl(Role.VERIFIER);
 
-        final CommonReferenceString crs = generator.generateCRS();
-        generator.generateStatementAndWitness(crs);
+        final Pairing pairing = generator.generatePairing();
+        generator.generateStatementAndWitness(pairing);
     }
 
     @Test
     public void testGenerateStatementAndWitness_asProver() {
         final GeneratorImpl generator = new GeneratorImpl(Role.PROVER);
 
-        final CommonReferenceStringImpl crs = (CommonReferenceStringImpl) generator.generateCRS();
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(crs);
+        final Pairing pairing = generator.generatePairing();
+        final CommonReferenceStringImpl crs = (CommonReferenceStringImpl) generator.generateCRS(pairing);
+        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
 
         final Vector a = ((StatementImpl) statementWitnessPair.getLeft()).getA();
         final Vector b = ((StatementImpl) statementWitnessPair.getLeft()).getB();

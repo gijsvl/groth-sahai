@@ -6,13 +6,9 @@ import edu.jhu.isi.grothsahai.exceptions.NotImplementedException;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
-import it.unisa.dia.gas.jpbc.PairingParameters;
-import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 import it.unisa.dia.gas.plaf.jpbc.field.z.ZrField;
-import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeDCurveGenerator;
 
 import java.security.SecureRandom;
 
@@ -40,13 +36,7 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         w[1] = new CustomQuadraticElement<Element>(b[2], g[2].newZeroElement().getImmutable(), u[1][1].getX(), pairing);
     }
 
-    public static CommonReferenceStringImpl generate() {
-        // TODO: make pairing flexible (and include as parameter)
-        final int discriminant = 9563;
-        final PairingParametersGenerator parametersGenerator = new PBCTypeDCurveGenerator(discriminant);
-        final PairingParameters params = parametersGenerator.generate();
-        final Pairing pairing = PairingFactory.getPairing(params);
-
+    public static CommonReferenceStringImpl generate(final Pairing pairing) {
         final Field zr = pairing.getZr();
         final Field[] g = new Field[3];
         g[0] = pairing.getGT();

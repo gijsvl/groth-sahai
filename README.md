@@ -16,7 +16,7 @@ http://gas.dia.unisa.it/projects/jpbc/docs/pbcwrapper.html
 * mvn clean test
 
 ### Implementation details ###
-
+Generation:
 ```
 #!java
 
@@ -24,10 +24,23 @@ final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH
 final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
 final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
 
-final CommonReferenceString crs = generator.generateCRS();
-final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(crs);
+final Pairing pairing = generator.generatePairing();
+final CommonReferenceString crs = generator.generateCRS(pairing);
+final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
+```
+
+Proof:
+```
+#!java
+
 final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
-isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
+```
+
+Verifying:
+```
+#!java
+
+verifier.verify(crs, statementWitnessPair.getLeft(), proof);
 ```
 
 ### References ###

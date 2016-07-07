@@ -7,6 +7,7 @@ import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.Pair;
 import edu.jhu.isi.grothsahai.enums.ImplementationType;
 import edu.jhu.isi.grothsahai.enums.Role;
+import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 
 import static org.springframework.util.Assert.isTrue;
@@ -18,8 +19,9 @@ public class GrothSahaiIT {
         final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
         final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
 
-        final CommonReferenceString crs = generator.generateCRS();
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(crs);
+        final Pairing pairing = generator.generatePairing();
+        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
         final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
         isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
     }
