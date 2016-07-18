@@ -42,8 +42,8 @@ public class GeneratorImpl implements Generator {
             throw new IllegalStateException("The verifier should not create a statement witness pair, " +
                     "but should receive the statement from the prover at generation time.");
         }
-        final int bLength = (int) Math.round(Math.random() * 10);
-        final int aLength = (int) Math.round(Math.random() * 10);
+        final int bLength = (int) Math.ceil(Math.random() * 10);
+        final int aLength = (int) Math.ceil(Math.random() * 10);
         Element[] aElements = new Element[aLength];
         Element[] yElements = new Element[aLength];
         for (int i = 0; i < aLength; i++) {
