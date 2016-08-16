@@ -16,7 +16,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
-import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeDCurveGenerator;
+import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeFCurveGenerator;
 
 public class GeneratorImpl implements Generator {
     private Role role;
@@ -26,9 +26,8 @@ public class GeneratorImpl implements Generator {
     }
 
     public Pairing generatePairing() {
-        // TODO: make pairing flexible
-        final int discriminant = 9563;
-        final PairingParametersGenerator parametersGenerator = new PBCTypeDCurveGenerator(discriminant);
+        final int rBits = 256;
+        final PairingParametersGenerator parametersGenerator = new PBCTypeFCurveGenerator(rBits);
         final PairingParameters params = parametersGenerator.generate();
         return PairingFactory.getPairing(params);
     }
