@@ -2,17 +2,18 @@ package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.entities.Proof;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProofImpl implements Proof {
     private Vector c;
     private Vector d;
-    private Vector pi;
-    private Vector theta;
+    private List<SingleProof> proofs = new ArrayList<SingleProof>();
 
-    public ProofImpl(final Vector c, final Vector d, final Vector pi, final Vector theta) {
+    public ProofImpl(final Vector c, final Vector d, final List<SingleProof> proofs) {
         this.c = c;
         this.d = d;
-        this.pi = pi;
-        this.theta = theta;
+        this.proofs = proofs;
     }
 
     public Vector getC() {
@@ -23,11 +24,7 @@ public class ProofImpl implements Proof {
         return d;
     }
 
-    public Vector getPi() {
-        return pi;
-    }
-
-    public Vector getTheta() {
-        return theta;
+    public List<SingleProof> getProofs() {
+        return new ArrayList<SingleProof>(proofs);
     }
 }
