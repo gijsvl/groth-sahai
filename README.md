@@ -21,26 +21,26 @@ Generation:
 #!java
 
 final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+        final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
+        final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
 
-final Pairing pairing = generator.generatePairing();
-final CommonReferenceString crs = generator.generateCRS(pairing);
-final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
+        final Pairing pairing = generator.generatePairing();
+        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
 ```
 
 Proof:
 ```
 #!java
 
-final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
+final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
 ```
 
 Verifying:
 ```
 #!java
 
-verifier.verify(crs, statementWitnessPair.getLeft(), proof);
+verifier.verify(crs, statementWitnessPair.getLeft(), proof)
 ```
 
 ### References ###
