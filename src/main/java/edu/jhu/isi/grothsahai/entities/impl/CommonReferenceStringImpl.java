@@ -137,15 +137,15 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return zr;
     }
 
-    QuadraticField getB1() {
+    public QuadraticField getB1() {
         return b[1];
     }
 
-    QuadraticField getB2() {
+    public QuadraticField getB2() {
         return b[2];
     }
 
-    QuadraticField getBT() {
+    public QuadraticField getBT() {
         return b[0];
     }
 
@@ -157,7 +157,7 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         return g[2];
     }
 
-    Field getGT() {
+    public Field getGT() {
         return g[0];
     }
 

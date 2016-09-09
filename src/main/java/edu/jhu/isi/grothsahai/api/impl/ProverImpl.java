@@ -23,8 +23,8 @@ public class ProverImpl implements Prover {
 
         final Matrix R = Matrix.random(crsImpl.getZr(), witnessImpl.getX().getLength(), 2);
         final Matrix S = Matrix.random(crsImpl.getZr(), witnessImpl.getY().getLength(), 2);
-        final Vector c = crsImpl.iota(1, witnessImpl.getX()).add(R.multiply(crsImpl.getU1()));
-        final Vector d = crsImpl.iota(2, witnessImpl.getY()).add(S.multiply(crsImpl.getU2()));
+        final Vector c = R != null ? crsImpl.iota(1, witnessImpl.getX()).add(R.multiply(crsImpl.getU1())) : null;
+        final Vector d = S != null ? crsImpl.iota(2, witnessImpl.getY()).add(S.multiply(crsImpl.getU2())) : null;
 
         final ArrayList<SingleProof> proofs = new ArrayList<SingleProof>();
         for (final Statement statement : statements) {
@@ -35,14 +35,30 @@ public class ProverImpl implements Prover {
 
     private SingleProof getSingleProof(final StatementImpl statementImpl, final WitnessImpl witnessImpl, final CommonReferenceStringImpl crsImpl, final Matrix R, final Matrix S) {
         final Matrix T = Matrix.random(crsImpl.getZr(), 2, 2);
-        final Vector pi = R.getTranspose().multiply(crsImpl.iota(2, statementImpl.getB()))
-                .add(R.getTranspose().multiply(statementImpl.getGamma()).multiply(crsImpl.iota(2, witnessImpl.getY())))
-                .add(R.getTranspose().multiply(statementImpl.getGamma()).multiply(S).multiply(crsImpl.getU2()))
-                .sub(T.getTranspose().multiply(crsImpl.getU2()));
-        final Vector theta = S.getTranspose().multiply(crsImpl.iota(1, statementImpl.getA()))
-                .add(S.getTranspose().multiply(statementImpl.getGamma().getTranspose())
-                        .multiply(crsImpl.iota(1, witnessImpl.getX())))
-                .add(T.multiply(crsImpl.getU1()));
+        Vector pi;
+        if (R != null) {
+            pi = R.getTranspose().multiply(crsImpl.iota(2, statementImpl.getB()));
+            if (statementImpl.getGamma() != null) {
+                pi = pi.add(R.getTranspose().multiply(statementImpl.getGamma()).multiply(crsImpl.iota(2, witnessImpl.getY())))
+                        .add(R.getTranspose().multiply(statementImpl.getGamma()).multiply(S).multiply(crsImpl.getU2()));
+            }
+        } else {
+            pi = Vector.getQuadraticNullVector(crsImpl.getB2(), crsImpl.getPairing(), 2);
+        }
+        pi = pi.sub(T.getTranspose().multiply(crsImpl.getU2()));
+
+
+        Vector theta;
+        if (S != null) {
+            theta = S.getTranspose().multiply(crsImpl.iota(1, statementImpl.getA()));
+            if (statementImpl.getGamma() != null) {
+                theta = theta.add(S.getTranspose().multiply(statementImpl.getGamma().getTranspose())
+                        .multiply(crsImpl.iota(1, witnessImpl.getX())));
+            }
+        } else {
+            theta = Vector.getQuadraticNullVector(crsImpl.getB1(), crsImpl.getPairing(), 2);
+        }
+        theta = theta.add(T.multiply(crsImpl.getU1()));
 
         return new SingleProof(pi, theta);
     }

@@ -5,6 +5,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MatrixTest extends BaseTest {
     @Test
@@ -17,6 +18,24 @@ public class MatrixTest extends BaseTest {
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
                 assertEquals(pairing.getG1(), random.get(i, j).getField());
+    }
+
+    @Test
+    public void testRandom_noRows() {
+        final Pairing pairing = createPairing();
+        final int cols = 3;
+        final int rows = 0;
+
+        assertNull(Matrix.random(pairing.getG1(), rows, cols));
+    }
+
+    @Test
+    public void testRandom_noCols() {
+        final Pairing pairing = createPairing();
+        final int cols = 0;
+        final int rows = 2;
+
+        assertNull(Matrix.random(pairing.getG1(), rows, cols));
     }
 
     @Test

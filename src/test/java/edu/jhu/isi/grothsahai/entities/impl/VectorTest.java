@@ -2,6 +2,7 @@ package edu.jhu.isi.grothsahai.entities.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import it.unisa.dia.gas.jpbc.Element;
+import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
@@ -10,8 +11,22 @@ import org.junit.Test;
 import java.security.SecureRandom;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class VectorTest extends BaseTest {
+    @Test
+    public void testGetNullVector() {
+        final Pairing pairing = createPairing();
+        final Vector vector = Vector.getQuadraticNullVector(
+                new QuadraticField<Field, QuadraticElement>(new SecureRandom(), pairing.getG1()),
+                pairing, 3);
+
+        assertEquals(3, vector.getLength());
+        for (int i = 0; i < vector.getLength(); i++) {
+            assertTrue(vector.get(i).isZero());
+        }
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void testAdd_illegalDimensions() {
         final Pairing pairing = createPairing();

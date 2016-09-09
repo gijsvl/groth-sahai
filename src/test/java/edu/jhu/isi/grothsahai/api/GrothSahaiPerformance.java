@@ -8,43 +8,43 @@ import edu.jhu.isi.grothsahai.entities.impl.Pair;
 import edu.jhu.isi.grothsahai.enums.ImplementationType;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Pairing;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-import static org.springframework.util.Assert.isTrue;
-
-public class GrothSahaiIT {
+@Ignore
+public class GrothSahaiPerformance {
     @Test
-    public void testValidProof() {
+    public void testPerformance() {
         final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
         final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
         final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
-        final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
-        isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
+        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1);
+        executePerformanceTest(prover, verifier, crs, statementWitnessPair);
+    }
+
+    private void executePerformanceTest(final Prover prover, final Verifier verifier, final CommonReferenceString crs, final Pair<Statement, Witness> statementWitnessPair) {
+        long proofDuration = 0;
+        long verificationDuration = 0;
+        for (int i = 0;i < 10;i++) {
+            final long startProof = System.nanoTime();
+            final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
+            proofDuration += System.nanoTime() - startProof;
+            final long startVerify = System.nanoTime();
+            verifier.verify(crs, statementWitnessPair.getLeft(), proof);
+            verificationDuration += System.nanoTime() - startVerify;
+        }
+
+        System.out.println("Proof Duration: " + proofDuration / 10000000 + "ms");
+        System.out.println("Verification Duration: " + verificationDuration / 10000000 + "ms");
     }
 
     @Test
-    public void testInvalidProof() {
-        final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-        final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-        final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
-
-        final Pairing pairing = generator.generatePairing();
-        final CommonReferenceString crs = generator.generateCRS(pairing);
-        final CommonReferenceString crs2 = generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
-        final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
-
-        isTrue(!verifier.verify(crs2, statementWitnessPair.getLeft(), proof));
-    }
-
-    @Test
-    public void testValidProof_onlyA() {
+    public void testPerformance_onlyA() {
         final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
         final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
         final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
@@ -52,12 +52,11 @@ public class GrothSahaiIT {
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
         final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 0);
-        final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
-        isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
+        executePerformanceTest(prover, verifier, crs, statementWitnessPair);
     }
 
     @Test
-    public void testValidProof_onlyB() {
+    public void testPerformance_onlyB() {
         final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
         final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
         final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
@@ -65,7 +64,6 @@ public class GrothSahaiIT {
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
         final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 0, 1);
-        final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
-        isTrue(verifier.verify(crs, statementWitnessPair.getLeft(), proof));
+        executePerformanceTest(prover, verifier, crs, statementWitnessPair);
     }
 }

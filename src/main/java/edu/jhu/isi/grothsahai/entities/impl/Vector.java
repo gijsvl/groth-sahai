@@ -1,6 +1,7 @@
 package edu.jhu.isi.grothsahai.entities.impl;
 
 import it.unisa.dia.gas.jpbc.Element;
+import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.ImmutableQuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
@@ -13,6 +14,14 @@ public class Vector {
 
     public Vector(final Element[] elements) {
         this.elements = elements;
+    }
+
+    public static Vector getQuadraticNullVector(final Field field, final Pairing pairing, final int size) {
+        final Element[] elements = new Element[size];
+        for (int i = 0; i < size; i++) {
+            elements[i] = new CustomQuadraticElement((QuadraticElement) field.newZeroElement(), pairing);
+        }
+        return new Vector(elements);
     }
 
     public Element get(final int i) {
@@ -46,12 +55,14 @@ public class Vector {
     }
 
     public Element pair(final Vector v, final Pairing pairing) {
-        if (getLength() != v.getLength()) {
+        if (getLength() != 0 && v.getLength() != 0 && getLength() != v.getLength()) {
             throw new IllegalArgumentException("Illegal vector dimensions.");
         }
         Element result = pairing.getGT().newZeroElement();
-        for (int i = 0; i < getLength(); i++) {
-            result = result.add(pairing.pairing(get(i), v.get(i)));
+        if (v.getLength() != 0) {
+            for (int i = 0; i < getLength(); i++) {
+                result = result.add(pairing.pairing(get(i), v.get(i)));
+            }
         }
         return result;
     }

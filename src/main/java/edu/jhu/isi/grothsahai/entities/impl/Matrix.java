@@ -11,6 +11,9 @@ public class Matrix {
     }
 
     public static Matrix random(final Field field, final int m, final int n) {
+        if (m == 0 || n == 0) {
+            return null;
+        }
         Element[][] elements = new Element[m][n];
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
@@ -23,7 +26,7 @@ public class Matrix {
     }
 
     public int getNumberOfCols() {
-        return elements[0].length;
+        return getNumberOfRows() != 0 ? elements[0].length : 0;
     }
 
     public int getNumberOfRows() {
@@ -31,8 +34,8 @@ public class Matrix {
     }
 
     public Matrix getTranspose() {
-        int m = elements.length;
-        int n = elements[0].length;
+        int m = getNumberOfRows();
+        int n = getNumberOfCols();
         Element[][] elementsT = new Element[n][m];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -43,8 +46,8 @@ public class Matrix {
     }
 
     public Matrix multiply(final Matrix B) {
-        final int mA = elements.length;
-        final int nA = elements[0].length;
+        final int mA = getNumberOfRows();
+        final int nA = getNumberOfCols();
         final int mB = B.getNumberOfRows();
         final int nB = B.getNumberOfCols();
         if (nA != mB) {
@@ -65,8 +68,8 @@ public class Matrix {
     }
 
     public Vector multiply(final Vector v) {
-        final int m = elements.length;
-        final int n = elements[0].length;
+        final int m = getNumberOfRows();
+        final int n = getNumberOfCols();
         if (v.getLength() != n) {
             throw new IllegalArgumentException("Illegal matrix dimensions.");
         }

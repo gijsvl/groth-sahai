@@ -43,6 +43,10 @@ public class GeneratorImpl implements Generator {
         }
         final int bLength = (int) Math.ceil(Math.random() * 10);
         final int aLength = (int) Math.ceil(Math.random() * 10);
+        return generateStatementAndWitness(pairing, aLength, bLength);
+    }
+
+    public Pair<Statement, Witness> generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength) {
         Element[] aElements = new Element[aLength];
         Element[] yElements = new Element[aLength];
         for (int i = 0; i < aLength; i++) {
@@ -62,9 +66,10 @@ public class GeneratorImpl implements Generator {
         final Vector x = new Vector(xElements);
         final Vector y = new Vector(yElements);
 
-        final Element t = a.pair(y, pairing)
-                .add(x.pair(b, pairing))
-                .add(x.pair(gamma.multiply(y), pairing));
+        Element t = a.pair(y, pairing).add(x.pair(b, pairing));
+        if (gamma != null) {
+            t = t.add(x.pair(gamma.multiply(y), pairing));
+        }
         final StatementImpl statement = new StatementImpl(a, b, gamma, t);
         final WitnessImpl witness = new WitnessImpl(x, y);
 

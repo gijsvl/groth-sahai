@@ -22,8 +22,8 @@ public class CustomQuadraticElement<E extends Element> extends ImmutableQuadrati
         super(eCustomQuadraticElement);
     }
 
-    public CustomQuadraticElement(final QuadraticElement eQuadraticElement, final Pairing pairing) {
-        super(eQuadraticElement);
+    public CustomQuadraticElement(final QuadraticElement quadraticElement, final Pairing pairing) {
+        super(quadraticElement);
         this.pairing = pairing;
     }
 

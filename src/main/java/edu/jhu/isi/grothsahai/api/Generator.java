@@ -12,4 +12,6 @@ public interface Generator {
     CommonReferenceString generateCRS(final Pairing pairing);
 
     Pair<Statement, Witness> generateStatementAndWitness(final Pairing pairing);
+
+    Pair<Statement, Witness> generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength);
 }
