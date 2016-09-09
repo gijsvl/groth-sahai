@@ -10,7 +10,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Ignore
 public class GrothSahaiPerformance {
@@ -22,19 +22,19 @@ public class GrothSahaiPerformance {
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1);
+        final Pair<List<Statement>, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1, 1);
         executePerformanceTest(prover, verifier, crs, statementWitnessPair);
     }
 
-    private void executePerformanceTest(final Prover prover, final Verifier verifier, final CommonReferenceString crs, final Pair<Statement, Witness> statementWitnessPair) {
+    private void executePerformanceTest(final Prover prover, final Verifier verifier, final CommonReferenceString crs, final Pair<List<Statement>, Witness> statementWitnessPair) {
         long proofDuration = 0;
         long verificationDuration = 0;
         for (int i = 0;i < 10;i++) {
             final long startProof = System.nanoTime();
-            final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
+            final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
             proofDuration += System.nanoTime() - startProof;
             final long startVerify = System.nanoTime();
-            verifier.verify(crs, Arrays.asList(statementWitnessPair.getLeft()), proof);
+            verifier.verify(crs, statementWitnessPair.getLeft(), proof);
             verificationDuration += System.nanoTime() - startVerify;
         }
 
@@ -50,7 +50,7 @@ public class GrothSahaiPerformance {
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 0);
+        final Pair<List<Statement>, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 0, 1);
         executePerformanceTest(prover, verifier, crs, statementWitnessPair);
     }
 
@@ -62,7 +62,7 @@ public class GrothSahaiPerformance {
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 0, 1);
+        final Pair<List<Statement>, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 0, 1, 1);
         executePerformanceTest(prover, verifier, crs, statementWitnessPair);
     }
 }

@@ -13,7 +13,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.util.Assert.notNull;
@@ -24,9 +24,9 @@ public class ProverImplTest extends BaseTest {
         final Prover prover = new ProverImpl();
         final Pairing pairing = createPairing();
         final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = new GeneratorImpl(Role.PROVER).generateStatementAndWitness(pairing);
+        final Pair<List<Statement>, Witness> statementWitnessPair = new GeneratorImpl(Role.PROVER).generateStatementAndWitness(pairing);
         final WitnessImpl witness = (WitnessImpl) statementWitnessPair.getRight();
-        final ProofImpl proof = (ProofImpl) prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), witness);
+        final ProofImpl proof = (ProofImpl) prover.proof(crs, statementWitnessPair.getLeft(), witness);
 
         notNull(proof.getC());
         assertEquals(crs.getG1(), ((QuadraticElement) proof.getC().get(0)).getField().getTargetField());
@@ -34,6 +34,7 @@ public class ProverImplTest extends BaseTest {
         notNull(proof.getD());
         assertEquals(crs.getG2(), ((QuadraticElement) proof.getD().get(0)).getField().getTargetField());
         assertEquals(witness.getY().getLength(), proof.getD().getLength());
+        //TODO: check singleProof
 //        notNull(proof.getPi());
 //        assertEquals(crs.getG2(), ((QuadraticElement) proof.getPi().get(0)).getField().getTargetField());
 //        assertEquals(2, proof.getPi().getLength());

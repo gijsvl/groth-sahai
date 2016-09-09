@@ -16,6 +16,8 @@ import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.springframework.util.Assert.notNull;
 
@@ -56,12 +58,13 @@ public class GeneratorImplTest extends BaseTest {
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceStringImpl crs = (CommonReferenceStringImpl) generator.generateCRS(pairing);
-        final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
+        final Pair<List<Statement>, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
 
-        final Vector a = ((StatementImpl) statementWitnessPair.getLeft()).getA();
-        final Vector b = ((StatementImpl) statementWitnessPair.getLeft()).getB();
-        final Matrix gamma = ((StatementImpl) statementWitnessPair.getLeft()).getGamma();
-        final Element t = ((StatementImpl) statementWitnessPair.getLeft()).getT();
+        final StatementImpl statement = (StatementImpl) statementWitnessPair.getLeft().get(0);
+        final Vector a = statement.getA();
+        final Vector b = statement.getB();
+        final Matrix gamma = statement.getGamma();
+        final Element t = statement.getT();
         final Vector x = ((WitnessImpl) statementWitnessPair.getRight()).getX();
         final Vector y = ((WitnessImpl) statementWitnessPair.getRight()).getY();
 

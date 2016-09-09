@@ -18,6 +18,9 @@ import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeFCurveGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GeneratorImpl implements Generator {
     private Role role;
 
@@ -36,43 +39,55 @@ public class GeneratorImpl implements Generator {
         return CommonReferenceStringImpl.generate(pairing);
     }
 
-    public Pair<Statement, Witness> generateStatementAndWitness(final Pairing pairing) {
+    public Pair<List<Statement>, Witness> generateStatementAndWitness(final Pairing pairing) {
         if (role == Role.VERIFIER) {
             throw new IllegalStateException("The verifier should not create a statement witness pair, " +
                     "but should receive the statement from the prover at generation time.");
         }
         final int bLength = (int) Math.ceil(Math.random() * 10);
         final int aLength = (int) Math.ceil(Math.random() * 10);
-        return generateStatementAndWitness(pairing, aLength, bLength);
+        return generateStatementAndWitness(pairing, aLength, bLength, 1);
     }
 
-    public Pair<Statement, Witness> generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength) {
-        Element[] aElements = new Element[aLength];
+    public Pair<List<Statement>, Witness> generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength, final int nrOfStatements) {
         Element[] yElements = new Element[aLength];
+        Element[] xElements = new Element[bLength];
         for (int i = 0; i < aLength; i++) {
-            aElements[i] = pairing.getG1().newRandomElement().getImmutable();
             yElements[i] = pairing.getG2().newRandomElement().getImmutable();
         }
+        for (int i = 0; i < bLength; i++) {
+            xElements[i] = pairing.getG1().newRandomElement().getImmutable();
+        }
+        final Vector x = new Vector(xElements);
+        final Vector y = new Vector(yElements);
+
+        final List<Statement> statements = new ArrayList<Statement>();
+        for (int i = 0; i < nrOfStatements; i++) {
+            statements.add(createStatement(pairing, aLength, bLength, x, y));
+        }
+        final Witness witness = new WitnessImpl(x, y);
+
+        return new Pair<List<Statement>, Witness>(statements, witness);
+    }
+
+    private Statement createStatement(final Pairing pairing, final int aLength, final int bLength, final Vector x, final Vector y) {
+        Element[] aElements = new Element[aLength];
         Element[] bElements = new Element[bLength];
-        Element[] xElements = new Element[bLength];
+        for (int i = 0; i < aLength; i++) {
+            aElements[i] = pairing.getG1().newRandomElement().getImmutable();
+        }
         for (int i = 0; i < bLength; i++) {
             bElements[i] = pairing.getG2().newRandomElement().getImmutable();
-            xElements[i] = pairing.getG1().newRandomElement().getImmutable();
         }
         final Matrix gamma = Matrix.random(pairing.getZr(), bLength, aLength);
 
         final Vector a = new Vector(aElements);
         final Vector b = new Vector(bElements);
-        final Vector x = new Vector(xElements);
-        final Vector y = new Vector(yElements);
 
         Element t = a.pair(y, pairing).add(x.pair(b, pairing));
         if (gamma != null) {
             t = t.add(x.pair(gamma.multiply(y), pairing));
         }
-        final StatementImpl statement = new StatementImpl(a, b, gamma, t);
-        final WitnessImpl witness = new WitnessImpl(x, y);
-
-        return new Pair<Statement, Witness>(statement, witness);
+        return new StatementImpl(a, b, gamma, t);
     }
 }
