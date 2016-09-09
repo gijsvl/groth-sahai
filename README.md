@@ -33,14 +33,14 @@ Proof:
 ```
 #!java
 
-final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
+final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
 ```
 
 Verifying:
 ```
 #!java
 
-verifier.verify(crs, statementWitnessPair.getLeft(), proof);
+verifier.verify(crs, statementWitnessPair.getLeft(), proof)
 ```
 
 ### References ###
