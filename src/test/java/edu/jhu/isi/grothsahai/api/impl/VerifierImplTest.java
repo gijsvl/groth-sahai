@@ -7,6 +7,8 @@ import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
@@ -23,6 +25,6 @@ public class VerifierImplTest extends BaseTest {
         final CommonReferenceString crs = null;
         final Statement statement = null;
         final Proof proof = null;
-        isTrue(!verifier.verify(crs, statement, proof));
+        isTrue(!verifier.verify(crs, Arrays.asList(statement), proof));
     }
 }

@@ -20,9 +20,9 @@ Generation:
 ```
 #!java
 
-final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+final Prover prover = NIZKFactory.createProver();
+final Verifier verifier = NIZKFactory.createVerifier();
 
 final Pairing pairing = generator.generatePairing();
 final CommonReferenceString crs = generator.generateCRS(pairing);
@@ -40,7 +40,7 @@ Verifying:
 ```
 #!java
 
-verifier.verify(crs, statementWitnessPair.getLeft(), proof)
+verifier.verify(crs, Arrays.asList(statementWitnessPair.getLeft()), proof)
 ```
 
 ### References ###

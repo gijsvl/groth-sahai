@@ -5,7 +5,6 @@ import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.Pair;
-import edu.jhu.isi.grothsahai.enums.ImplementationType;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Ignore;
@@ -17,9 +16,9 @@ import java.util.Arrays;
 public class GrothSahaiPerformance {
     @Test
     public void testPerformance() {
-        final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-        final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-        final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+        final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+        final Prover prover = NIZKFactory.createProver();
+        final Verifier verifier = NIZKFactory.createVerifier();
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
@@ -35,7 +34,7 @@ public class GrothSahaiPerformance {
             final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
             proofDuration += System.nanoTime() - startProof;
             final long startVerify = System.nanoTime();
-            verifier.verify(crs, statementWitnessPair.getLeft(), proof);
+            verifier.verify(crs, Arrays.asList(statementWitnessPair.getLeft()), proof);
             verificationDuration += System.nanoTime() - startVerify;
         }
 
@@ -45,9 +44,9 @@ public class GrothSahaiPerformance {
 
     @Test
     public void testPerformance_onlyA() {
-        final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-        final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-        final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+        final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+        final Prover prover = NIZKFactory.createProver();
+        final Verifier verifier = NIZKFactory.createVerifier();
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);
@@ -57,9 +56,9 @@ public class GrothSahaiPerformance {
 
     @Test
     public void testPerformance_onlyB() {
-        final Generator generator = NIZKFactory.createGenerator(ImplementationType.GROTH_SAHAI, Role.PROVER);
-        final Prover prover = NIZKFactory.createProver(ImplementationType.GROTH_SAHAI);
-        final Verifier verifier = NIZKFactory.createVerifier(ImplementationType.GROTH_SAHAI);
+        final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+        final Prover prover = NIZKFactory.createProver();
+        final Verifier verifier = NIZKFactory.createVerifier();
 
         final Pairing pairing = generator.generatePairing();
         final CommonReferenceString crs = generator.generateCRS(pairing);

@@ -12,14 +12,19 @@ import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
 import edu.jhu.isi.grothsahai.enums.ProblemType;
 import it.unisa.dia.gas.jpbc.Element;
 
+import java.util.List;
+
 public class VerifierImpl implements Verifier {
-    public Boolean verify(final CommonReferenceString crs, final Statement statement, final Proof proof) {
+    public Boolean verify(final CommonReferenceString crs, final List<Statement> statements, final Proof proof) {
         final ProofImpl proofImpl = (ProofImpl) proof;
-        final StatementImpl statementImpl = (StatementImpl) statement;
         final CommonReferenceStringImpl crsImpl = (CommonReferenceStringImpl) crs;
 
-        for (final SingleProof singleProof : proofImpl.getProofs()) {
-            if (!verifyOneEquation(proofImpl, statementImpl, crsImpl, singleProof)) {
+        if (proofImpl.getProofs().size() != statements.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < proofImpl.getProofs().size(); i++) {
+            if (!verifyOneEquation(proofImpl, (StatementImpl) statements.get(i), crsImpl, proofImpl.getProofs().get(i))) {
                 return false;
             }
         }
