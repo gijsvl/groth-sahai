@@ -10,7 +10,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.util.Assert.isTrue;
@@ -52,7 +52,7 @@ public class GrothSahaiIT {
         final CommonReferenceString crs = generator.generateCRS(pairing);
         final Pair<List<Statement>, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1, 2);
         final Proof proof = prover.proof(crs, statementWitnessPair.getLeft(), statementWitnessPair.getRight());
-        isTrue(!verifier.verify(crs, Arrays.asList(statementWitnessPair.getLeft().get(0)), proof));
+        isTrue(!verifier.verify(crs, Collections.singletonList(statementWitnessPair.getLeft().get(0)), proof));
     }
 
     @Test
