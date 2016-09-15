@@ -34,12 +34,11 @@ public class ProverImplTest extends BaseTest {
         notNull(proof.getD());
         assertEquals(crs.getG2(), ((QuadraticElement) proof.getD().get(0)).getField().getTargetField());
         assertEquals(witness.getY().getLength(), proof.getD().getLength());
-        //TODO: check singleProof
-//        notNull(proof.getPi());
-//        assertEquals(crs.getG2(), ((QuadraticElement) proof.getPi().get(0)).getField().getTargetField());
-//        assertEquals(2, proof.getPi().getLength());
-//        notNull(proof.getTheta());
-//        assertEquals(crs.getG1(), ((QuadraticElement) proof.getTheta().get(0)).getField().getTargetField());
-//        assertEquals(2, proof.getTheta().getLength());
+        notNull(proof.getProofs().get(0).getPi());
+        assertEquals(crs.getG2(), ((QuadraticElement) proof.getProofs().get(0).getPi().get(0)).getField().getTargetField());
+        assertEquals(2, proof.getProofs().get(0).getPi().getLength());
+        notNull(proof.getProofs().get(0).getTheta());
+        assertEquals(crs.getG1(), ((QuadraticElement) proof.getProofs().get(0).getTheta().get(0)).getField().getTargetField());
+        assertEquals(2, proof.getProofs().get(0).getTheta().getLength());
     }
 }
