@@ -2,8 +2,7 @@ package edu.jhu.isi.grothsahai.api;
 
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
-import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
-import edu.jhu.isi.grothsahai.entities.impl.ProofImpl;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Before;
@@ -57,7 +56,7 @@ public class GrothSahaiIT {
     public void testInvalidProof() throws Exception {
         final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing);
         final Proof proof = prover.proof(statementWitnessPair.getStatement(), statementWitnessPair.getWitness());
-        final ProofImpl proofImpl = (ProofImpl) proof;
+        final Proof proofImpl = (Proof) proof;
         ReflectionTestUtils.setField(proof, "c", proofImpl.getC().add(proofImpl.getC()));
         isTrue(!verifier.verify(statementWitnessPair.getStatement(), proof));
     }

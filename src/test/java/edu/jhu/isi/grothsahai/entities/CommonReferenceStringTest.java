@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai.entities.impl;
+package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.enums.ProblemType;
@@ -11,10 +11,10 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 
-public class CommonReferenceStringImplTest extends BaseTest {
+public class CommonReferenceStringTest extends BaseTest {
     @Test
     public void canGenerateRandomCRS() {
-        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS =  CommonReferenceString.generate(createPairing());
         isTrue(!CRS.getU11().isZero());
         isTrue(!CRS.getU11().isOne());
         isTrue(!CRS.getU12().isZero());
@@ -34,7 +34,7 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test
     public void canGenerateRandomCRS_allElementsInBi() {
-        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS =  CommonReferenceString.generate(createPairing());
         isTrue(CRS.getU11().getField().equals(CRS.getB1()));
         isTrue(CRS.getU12().getField().equals(CRS.getB1()));
         isTrue(CRS.getU21().getField().equals(CRS.getB2()));
@@ -43,7 +43,7 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test
     public void canGenerateRandomCRS_allSubElementsInGi() {
-        final CommonReferenceStringImpl CRS =  CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS =  CommonReferenceString.generate(createPairing());
         isTrue(CRS.getU11().getX().getField().equals(CRS.getG1()));
         isTrue(CRS.getU11().getY().getField().equals(CRS.getG1()));
         isTrue(CRS.getU12().getX().getField().equals(CRS.getG1()));
@@ -56,13 +56,13 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testIota_wrongIndex() {
-        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS = CommonReferenceString.generate(createPairing());
         CRS.iota(3, CRS.getG1().newRandomElement());
     }
 
     @Test
     public void testIota_firstElementIsZero() {
-        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS = CommonReferenceString.generate(createPairing());
         final QuadraticElement iota1 = CRS.iota(1, CRS.getG1().newRandomElement());
         final QuadraticElement iota2 = CRS.iota(2, CRS.getG2().newRandomElement());
         isTrue(iota1.getX().isZero());
@@ -73,14 +73,14 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test
     public void testIota_mapsToCorrectField() {
-        final CommonReferenceStringImpl CRS = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString CRS = CommonReferenceString.generate(createPairing());
         isTrue(CRS.iota(1, CRS.getG1().newRandomElement()).getField().equals(CRS.getB1()));
         isTrue(CRS.iota(2, CRS.getG2().newRandomElement()).getField().equals(CRS.getB2()));
     }
 
     @Test
     public void testIotaT_PairingProduct() {
-        final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString crs = CommonReferenceString.generate(createPairing());
         final Element x = crs.getG1().newRandomElement();
         final QuarticElement iotaT = crs.iotaT(ProblemType.PAIRING_PRODUCT, x);
 
@@ -93,7 +93,7 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test(expected = NotImplementedException.class)
     public void testIotaT_MultiScalarG1() {
-        final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString crs = CommonReferenceString.generate(createPairing());
         final Element x = crs.getG1().newRandomElement();
 
         crs.iotaT(ProblemType.MULTI_SCALAR_G1, x);
@@ -101,7 +101,7 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test(expected = NotImplementedException.class)
     public void testIotaT_MultiScalarG2() {
-        final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString crs = CommonReferenceString.generate(createPairing());
         final Element x = crs.getG1().newRandomElement();
 
         crs.iotaT(ProblemType.MULTI_SCALAR_G2, x);
@@ -109,7 +109,7 @@ public class CommonReferenceStringImplTest extends BaseTest {
 
     @Test(expected = NotImplementedException.class)
     public void testIotaT_Quadratic() {
-        final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(createPairing());
+        final CommonReferenceString crs = CommonReferenceString.generate(createPairing());
         final Element x = crs.getG1().newRandomElement();
 
         crs.iotaT(ProblemType.QUADRATIC, x);

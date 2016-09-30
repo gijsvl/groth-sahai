@@ -3,12 +3,11 @@ package edu.jhu.isi.grothsahai.api.impl;
 import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.api.Generator;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
-import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.Matrix;
-import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
-import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
-import edu.jhu.isi.grothsahai.entities.impl.Vector;
-import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
+import edu.jhu.isi.grothsahai.entities.Matrix;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
+import edu.jhu.isi.grothsahai.entities.Statement;
+import edu.jhu.isi.grothsahai.entities.Vector;
+import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -53,16 +52,16 @@ public class GeneratorImplTest extends BaseTest {
         final GeneratorImpl generator = new GeneratorImpl(Role.PROVER);
 
         final Pairing pairing = generator.generatePairing();
-        final CommonReferenceStringImpl crs = (CommonReferenceStringImpl) generator.generateCRS(pairing);
+        final CommonReferenceString crs = (CommonReferenceString) generator.generateCRS(pairing);
         final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing);
 
-        final StatementImpl statement = (StatementImpl) statementWitnessPair.getStatement().get(0);
+        final Statement statement = (Statement) statementWitnessPair.getStatement().get(0);
         final Vector a = statement.getA();
         final Vector b = statement.getB();
         final Matrix gamma = statement.getGamma();
         final Element t = statement.getT();
-        final Vector x = ((WitnessImpl) statementWitnessPair.getWitness()).getX();
-        final Vector y = ((WitnessImpl) statementWitnessPair.getWitness()).getY();
+        final Vector x = ((Witness) statementWitnessPair.getWitness()).getX();
+        final Vector y = ((Witness) statementWitnessPair.getWitness()).getY();
 
         notNull(statementWitnessPair.getStatement());
         notNull(a);

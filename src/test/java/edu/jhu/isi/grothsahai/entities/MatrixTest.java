@@ -1,6 +1,8 @@
-package edu.jhu.isi.grothsahai.entities.impl;
+package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.BaseTest;
+import edu.jhu.isi.grothsahai.entities.Matrix;
+import edu.jhu.isi.grothsahai.entities.Vector;
 import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 

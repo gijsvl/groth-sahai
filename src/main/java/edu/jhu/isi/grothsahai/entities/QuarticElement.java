@@ -1,4 +1,4 @@
-package edu.jhu.isi.grothsahai.entities.impl;
+package edu.jhu.isi.grothsahai.entities;
 
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.ImmutableQuadraticElement;

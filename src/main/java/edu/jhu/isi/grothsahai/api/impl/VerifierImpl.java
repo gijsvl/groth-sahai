@@ -4,11 +4,8 @@ import edu.jhu.isi.grothsahai.api.Verifier;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
-import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.ProofImpl;
-import edu.jhu.isi.grothsahai.entities.impl.QuarticElement;
-import edu.jhu.isi.grothsahai.entities.impl.SingleProof;
-import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
+import edu.jhu.isi.grothsahai.entities.QuarticElement;
+import edu.jhu.isi.grothsahai.entities.SingleProof;
 import edu.jhu.isi.grothsahai.enums.ProblemType;
 import it.unisa.dia.gas.jpbc.Element;
 
@@ -16,21 +13,19 @@ import java.util.List;
 
 public class VerifierImpl implements Verifier {
 
-    private CommonReferenceStringImpl crsImpl;
+    private CommonReferenceString crsImpl;
 
     public VerifierImpl(final CommonReferenceString crs) {
-        this.crsImpl = (CommonReferenceStringImpl) crs;
+        this.crsImpl = crs;
     }
 
     public Boolean verify(final List<Statement> statements, final Proof proof) {
-        final ProofImpl proofImpl = (ProofImpl) proof;
-
-        if (proofImpl.getProofs().size() != statements.size()) {
+        if (proof.getProofs().size() != statements.size()) {
             return false;
         }
 
-        for (int i = 0; i < proofImpl.getProofs().size(); i++) {
-            if (!verifyOneEquation(proofImpl, (StatementImpl) statements.get(i), proofImpl.getProofs().get(i))) {
+        for (int i = 0; i < proof.getProofs().size(); i++) {
+            if (!verifyOneEquation(proof, statements.get(i), proof.getProofs().get(i))) {
                 return false;
             }
         }
@@ -38,21 +33,21 @@ public class VerifierImpl implements Verifier {
         return true;
     }
 
-    private boolean verifyOneEquation(final ProofImpl proofImpl, final StatementImpl statementImpl, final SingleProof singleProof) {
+    private boolean verifyOneEquation(final Proof proof, final Statement statement, final SingleProof singleProof) {
         Element lhs;
-        if (statementImpl.getA().getLength() != 0) {
-            lhs = crsImpl.iota(1, statementImpl.getA()).pairInB(proofImpl.getD(), crsImpl.getPairing());
+        if (statement.getA().getLength() != 0) {
+            lhs = crsImpl.iota(1, statement.getA()).pairInB(proof.getD(), crsImpl.getPairing());
         } else {
             lhs = new QuarticElement(crsImpl.getBT(), crsImpl.getGT().newZeroElement(), crsImpl.getGT().newZeroElement(), crsImpl.getGT().newZeroElement(), crsImpl.getGT().newZeroElement());
         }
-        if (statementImpl.getB().getLength() != 0) {
-            lhs = lhs.add(proofImpl.getC().pairInB(crsImpl.iota(2, statementImpl.getB()), crsImpl.getPairing()));
+        if (statement.getB().getLength() != 0) {
+            lhs = lhs.add(proof.getC().pairInB(crsImpl.iota(2, statement.getB()), crsImpl.getPairing()));
         }
-        if (statementImpl.getGamma() != null) {
-            lhs = lhs.add(proofImpl.getC().pairInB(statementImpl.getGamma().multiply(proofImpl.getD()), crsImpl.getPairing()));
+        if (statement.getGamma() != null) {
+            lhs = lhs.add(proof.getC().pairInB(statement.getGamma().multiply(proof.getD()), crsImpl.getPairing()));
         }
 
-        final Element rhs = crsImpl.iotaT(ProblemType.PAIRING_PRODUCT, statementImpl.getT())
+        final Element rhs = crsImpl.iotaT(ProblemType.PAIRING_PRODUCT, statement.getT())
                 .add(crsImpl.getU1().pairInB(singleProof.getPi(), crsImpl.getPairing()))
                 .add(singleProof.getTheta().pairInB(crsImpl.getU2(), crsImpl.getPairing()));
         return lhs.isEqual(rhs);

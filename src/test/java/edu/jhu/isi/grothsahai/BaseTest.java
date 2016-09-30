@@ -1,6 +1,6 @@
 package edu.jhu.isi.grothsahai;
 
-import edu.jhu.isi.grothsahai.entities.impl.Vector;
+import edu.jhu.isi.grothsahai.entities.Vector;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;

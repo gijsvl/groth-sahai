@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.CustomQuadraticElement;
+import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
+import edu.jhu.isi.grothsahai.entities.CustomQuadraticElement;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import org.apache.commons.codec.DecoderException;
@@ -20,9 +20,9 @@ public class ElementJsonSerializer<E extends Element> implements JsonSerializer<
 
     private static final String VALUE = "value";
     private static final String TYPE = "type";
-    private final CommonReferenceStringImpl crs;
+    private final CommonReferenceString crs;
 
-    public ElementJsonSerializer(final CommonReferenceStringImpl crs) {
+    public ElementJsonSerializer(final CommonReferenceString crs) {
         this.crs = crs;
     }
 

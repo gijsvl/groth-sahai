@@ -4,12 +4,9 @@ import edu.jhu.isi.grothsahai.api.Generator;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
-import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.Matrix;
-import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
-import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
-import edu.jhu.isi.grothsahai.entities.impl.Vector;
-import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
+import edu.jhu.isi.grothsahai.entities.Matrix;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
+import edu.jhu.isi.grothsahai.entities.Vector;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -36,7 +33,7 @@ public class GeneratorImpl implements Generator {
     }
 
     public CommonReferenceString generateCRS(final Pairing pairing) {
-        return CommonReferenceStringImpl.generate(pairing);
+        return CommonReferenceString.generate(pairing);
     }
 
     public StatementAndWitness generateStatementAndWitness(final Pairing pairing) {
@@ -61,11 +58,11 @@ public class GeneratorImpl implements Generator {
         final Vector x = new Vector(xElements);
         final Vector y = new Vector(yElements);
 
-        final List<Statement> statements = new ArrayList<Statement>();
+        final List<Statement> statements = new ArrayList<>();
         for (int i = 0; i < nrOfStatements; i++) {
             statements.add(createStatement(pairing, aLength, bLength, x, y));
         }
-        final Witness witness = new WitnessImpl(x, y);
+        final Witness witness = new Witness(x, y);
 
         return new StatementAndWitness(statements, witness);
     }
@@ -88,6 +85,6 @@ public class GeneratorImpl implements Generator {
         if (gamma != null) {
             t = t.add(x.pair(gamma.multiply(y), pairing));
         }
-        return new StatementImpl(a, b, gamma, t);
+        return new Statement(a, b, gamma, t);
     }
 }

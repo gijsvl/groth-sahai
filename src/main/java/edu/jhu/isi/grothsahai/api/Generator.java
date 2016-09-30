@@ -1,7 +1,7 @@
 package edu.jhu.isi.grothsahai.api;
 
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
-import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import it.unisa.dia.gas.jpbc.Pairing;
 
 public interface Generator {

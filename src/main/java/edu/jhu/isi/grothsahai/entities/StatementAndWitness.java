@@ -1,7 +1,4 @@
-package edu.jhu.isi.grothsahai.entities.impl;
-
-import edu.jhu.isi.grothsahai.entities.Statement;
-import edu.jhu.isi.grothsahai.entities.Witness;
+package edu.jhu.isi.grothsahai.entities;
 
 import java.util.List;
 import java.util.Objects;

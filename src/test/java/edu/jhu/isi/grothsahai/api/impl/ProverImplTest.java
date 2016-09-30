@@ -2,10 +2,10 @@ package edu.jhu.isi.grothsahai.api.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.api.Prover;
-import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
-import edu.jhu.isi.grothsahai.entities.impl.ProofImpl;
-import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
+import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
+import edu.jhu.isi.grothsahai.entities.Proof;
+import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
@@ -18,11 +18,11 @@ public class ProverImplTest extends BaseTest {
     @Test
     public void testProof() {
         final Pairing pairing = createPairing();
-        final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(pairing);
+        final CommonReferenceString crs = CommonReferenceString.generate(pairing);
         final Prover prover = new ProverImpl(crs);
         final StatementAndWitness statementWitnessPair = new GeneratorImpl(Role.PROVER).generateStatementAndWitness(pairing);
-        final WitnessImpl witness = (WitnessImpl) statementWitnessPair.getWitness();
-        final ProofImpl proof = (ProofImpl) prover.proof(statementWitnessPair.getStatement(), witness);
+        final Witness witness = (Witness) statementWitnessPair.getWitness();
+        final Proof proof = (Proof) prover.proof(statementWitnessPair.getStatement(), witness);
 
         notNull(proof.getC());
         assertEquals(crs.getG1(), ((QuadraticElement) proof.getC().get(0)).getField().getTargetField());
