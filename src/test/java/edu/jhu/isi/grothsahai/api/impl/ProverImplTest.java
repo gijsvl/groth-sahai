@@ -2,10 +2,8 @@ package edu.jhu.isi.grothsahai.api.impl;
 
 import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.api.Prover;
-import edu.jhu.isi.grothsahai.entities.Statement;
-import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
-import edu.jhu.isi.grothsahai.entities.impl.Pair;
+import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
 import edu.jhu.isi.grothsahai.entities.impl.ProofImpl;
 import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
 import edu.jhu.isi.grothsahai.enums.Role;
@@ -13,20 +11,18 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.springframework.util.Assert.notNull;
 
 public class ProverImplTest extends BaseTest {
     @Test
     public void testProof() {
-        final Prover prover = new ProverImpl();
         final Pairing pairing = createPairing();
         final CommonReferenceStringImpl crs = CommonReferenceStringImpl.generate(pairing);
-        final Pair<List<Statement>, Witness> statementWitnessPair = new GeneratorImpl(Role.PROVER).generateStatementAndWitness(pairing);
-        final WitnessImpl witness = (WitnessImpl) statementWitnessPair.getRight();
-        final ProofImpl proof = (ProofImpl) prover.proof(crs, statementWitnessPair.getLeft(), witness);
+        final Prover prover = new ProverImpl(crs);
+        final StatementAndWitness statementWitnessPair = new GeneratorImpl(Role.PROVER).generateStatementAndWitness(pairing);
+        final WitnessImpl witness = (WitnessImpl) statementWitnessPair.getWitness();
+        final ProofImpl proof = (ProofImpl) prover.proof(statementWitnessPair.getStatement(), witness);
 
         notNull(proof.getC());
         assertEquals(crs.getG1(), ((QuadraticElement) proof.getC().get(0)).getField().getTargetField());

@@ -8,12 +8,16 @@ import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 public class Vector {
     private Element[] elements;
 
     public Vector(final Element[] elements) {
         this.elements = elements;
+    }
+
+    public Vector() {
     }
 
     public static Vector getQuadraticNullVector(final Field field, final Pairing pairing, final int size) {
@@ -88,5 +92,25 @@ public class Vector {
 
     public void set(final int i, final Element element) {
         elements[i] = element;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Vector vector = (Vector) o;
+        return Arrays.equals(elements, vector.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(elements);
+    }
+
+    @Override
+    public String toString() {
+        return "Vector{" +
+                "elements=" + Arrays.toString(elements) +
+                '}';
     }
 }

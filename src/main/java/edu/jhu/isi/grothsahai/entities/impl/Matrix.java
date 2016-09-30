@@ -3,6 +3,8 @@ package edu.jhu.isi.grothsahai.entities.impl;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 
+import java.util.Arrays;
+
 public class Matrix {
     private Element[][] elements;
 
@@ -83,5 +85,25 @@ public class Matrix {
             }
         }
         return new Vector(y);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Matrix matrix = (Matrix) o;
+        return Arrays.deepEquals(elements, matrix.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(elements);
+    }
+
+    @Override
+    public String toString() {
+        return "Matrix{" +
+                "elements=" + Arrays.deepToString(elements) +
+                '}';
     }
 }

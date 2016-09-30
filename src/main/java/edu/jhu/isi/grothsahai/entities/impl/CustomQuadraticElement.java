@@ -12,7 +12,7 @@ public class CustomQuadraticElement<E extends Element> extends ImmutableQuadrati
     private Pairing pairing = null;
 
     public CustomQuadraticElement(final QuadraticField field, final E x, final E y, final Pairing pairing) {
-        super(new QuadraticElement<Element>(field));
+        super(new QuadraticElement<>(field));
         this.x = x;
         this.y = y;
         this.pairing = pairing;
@@ -28,7 +28,7 @@ public class CustomQuadraticElement<E extends Element> extends ImmutableQuadrati
     }
 
     public QuarticElement pair(final CustomQuadraticElement element) {
-        return new QuarticElement<Element>(new QuadraticField(new SecureRandom(), pairing.getGT()),
+        return new QuarticElement<>(new QuadraticField(new SecureRandom(), pairing.getGT()),
                 pairing.pairing(this.getX(), element.getX()),
                 pairing.pairing(this.getX(), element.getY()),
                 pairing.pairing(this.getY(), element.getX()),
@@ -40,7 +40,7 @@ public class CustomQuadraticElement<E extends Element> extends ImmutableQuadrati
     }
 
     public Element getImmutable() {
-        return new CustomQuadraticElement<E>(this);
+        return new CustomQuadraticElement<>(this);
     }
 
     public QuadraticElement duplicate() {

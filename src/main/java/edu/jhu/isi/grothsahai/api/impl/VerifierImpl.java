@@ -15,16 +15,22 @@ import it.unisa.dia.gas.jpbc.Element;
 import java.util.List;
 
 public class VerifierImpl implements Verifier {
-    public Boolean verify(final CommonReferenceString crs, final List<Statement> statements, final Proof proof) {
+
+    private CommonReferenceStringImpl crsImpl;
+
+    public VerifierImpl(final CommonReferenceString crs) {
+        this.crsImpl = (CommonReferenceStringImpl) crs;
+    }
+
+    public Boolean verify(final List<Statement> statements, final Proof proof) {
         final ProofImpl proofImpl = (ProofImpl) proof;
-        final CommonReferenceStringImpl crsImpl = (CommonReferenceStringImpl) crs;
 
         if (proofImpl.getProofs().size() != statements.size()) {
             return false;
         }
 
         for (int i = 0; i < proofImpl.getProofs().size(); i++) {
-            if (!verifyOneEquation(proofImpl, (StatementImpl) statements.get(i), crsImpl, proofImpl.getProofs().get(i))) {
+            if (!verifyOneEquation(proofImpl, (StatementImpl) statements.get(i), proofImpl.getProofs().get(i))) {
                 return false;
             }
         }
@@ -32,7 +38,7 @@ public class VerifierImpl implements Verifier {
         return true;
     }
 
-    private boolean verifyOneEquation(final ProofImpl proofImpl, final StatementImpl statementImpl, final CommonReferenceStringImpl crsImpl, final SingleProof singleProof) {
+    private boolean verifyOneEquation(final ProofImpl proofImpl, final StatementImpl statementImpl, final SingleProof singleProof) {
         Element lhs;
         if (statementImpl.getA().getLength() != 0) {
             lhs = crsImpl.iota(1, statementImpl.getA()).pairInB(proofImpl.getD(), crsImpl.getPairing());

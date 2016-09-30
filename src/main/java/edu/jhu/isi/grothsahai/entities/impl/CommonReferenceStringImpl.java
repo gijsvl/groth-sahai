@@ -20,10 +20,10 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
     private final QuadraticElement[][] u = new QuadraticElement[2][2];
     private final Pairing pairing;
 
-    public CommonReferenceStringImpl(final QuadraticElement u11, final QuadraticElement u12,
-                                     final QuadraticElement u21, final QuadraticElement u22,
-                                     final Field zr, final Field[] g, final QuadraticField[] b,
-                                     final Pairing pairing) {
+    private CommonReferenceStringImpl(final QuadraticElement u11, final QuadraticElement u12,
+                                      final QuadraticElement u21, final QuadraticElement u22,
+                                      final Field zr, final Field[] g, final QuadraticField[] b,
+                                      final Pairing pairing) {
         this.u[0][0] = u11;
         this.u[0][1] = u12;
         this.u[1][0] = u21;
@@ -32,8 +32,8 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         this.g = g;
         this.b = b;
         this.pairing = pairing;
-        w[0] = new CustomQuadraticElement<Element>(b[1], g[1].newZeroElement().getImmutable(), u[0][1].getX(), pairing);
-        w[1] = new CustomQuadraticElement<Element>(b[2], g[2].newZeroElement().getImmutable(), u[1][1].getX(), pairing);
+        w[0] = new CustomQuadraticElement<>(b[1], g[1].newZeroElement().getImmutable(), u[0][1].getX(), pairing);
+        w[1] = new CustomQuadraticElement<>(b[2], g[2].newZeroElement().getImmutable(), u[1][1].getX(), pairing);
     }
 
     public static CommonReferenceStringImpl generate(final Pairing pairing) {
@@ -47,23 +47,32 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         final Element t1 = newNonZeroNonOneElement(zr);
         final Element q1 = p1.mulZn(a1).getImmutable();
         final Element u1 = p1.mulZn(t1).getImmutable();
-        final Element v1 = q1.mulZn(t1).getImmutable();
         final Element p2 = newNonZeroNonOneElement(g[2]);
         final Element a2 = newNonZeroNonOneElement(zr);
         final Element t2 = newNonZeroNonOneElement(zr);
         final Element q2 = p2.mulZn(a2).getImmutable();
         final Element u2 = p2.mulZn(t2).getImmutable();
-        final Element v2 = q2.mulZn(t2).getImmutable();
+        final SecureRandom secureRandom = new SecureRandom();
+        final int i = secureRandom.nextInt();
+        final Element v1;
+        final Element v2;
+        if (i % 2 == 0) {
+            v1 = q1.mulZn(t1).getImmutable();
+            v2 = q2.mulZn(t2).getImmutable();
+        } else {
+            v1 = q1.mulZn(t1).getImmutable().sub(p1).getImmutable();
+            v2 = q2.mulZn(t2).getImmutable().sub(p2).getImmutable();
+        }
 
         final QuadraticField[] b = new QuadraticField[3];
-        b[1] = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[1]);
-        b[2] = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[2]);
-        final QuadraticField partBt = new QuadraticField<Field, QuadraticElement>(new SecureRandom(), g[0]);
-        b[0] = new QuadraticField<QuadraticField, QuadraticElement>(new SecureRandom(), partBt);
-        final CustomQuadraticElement<Element> bigU11 = new CustomQuadraticElement<Element>(b[1], p1, q1, pairing);
-        final CustomQuadraticElement<Element> bigU12 = new CustomQuadraticElement<Element>(b[1], u1, v1, pairing);
-        final CustomQuadraticElement<Element> bigU21 = new CustomQuadraticElement<Element>(b[2], p2, q2, pairing);
-        final CustomQuadraticElement<Element> bigU22 = new CustomQuadraticElement<Element>(b[2], u2, v2, pairing);
+        b[1] = new QuadraticField<>(new SecureRandom(), g[1]);
+        b[2] = new QuadraticField<>(new SecureRandom(), g[2]);
+        final QuadraticField partBt = new QuadraticField<>(new SecureRandom(), g[0]);
+        b[0] = new QuadraticField<>(new SecureRandom(), partBt);
+        final CustomQuadraticElement<Element> bigU11 = new CustomQuadraticElement<>(b[1], p1, q1, pairing);
+        final CustomQuadraticElement<Element> bigU12 = new CustomQuadraticElement<>(b[1], u1, v1, pairing);
+        final CustomQuadraticElement<Element> bigU21 = new CustomQuadraticElement<>(b[2], p2, q2, pairing);
+        final CustomQuadraticElement<Element> bigU22 = new CustomQuadraticElement<>(b[2], u2, v2, pairing);
 
         return new CommonReferenceStringImpl(bigU11, bigU12, bigU21, bigU22, zr, g, b, pairing);
     }
@@ -81,30 +90,14 @@ public class CommonReferenceStringImpl implements CommonReferenceString {
         if (index != 1 && index != 2) {
             throw new IllegalArgumentException("Index must be 1 or 2.");
         }
-//        final int indexMin1 = index - 1;
-//        if (g[index].equals(zr)) {
-//            //TODO: test this branch
-//            return u[indexMin1][1].sub(w[indexMin1]).mulZn(x);
-//        }
-        return new CustomQuadraticElement<Element>(b[index], g[index].newZeroElement(), x, pairing);
+        return new CustomQuadraticElement<>(b[index], g[index].newZeroElement(), x, pairing);
     }
 
     public QuarticElement iotaT(final ProblemType type, final Element x) {
-        // TODO: child classes for the different types
         switch (type) {
             case PAIRING_PRODUCT:
-                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
+                return new QuarticElement<>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
                         g[0].newOneElement(), g[0].newOneElement(), x);
-//            case MULTI_SCALAR_G1:
-//                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
-//                        g[0].newOneElement(), ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[1].getX()),
-//                        ((CustomQuadraticElement) x).pair((CustomQuadraticElement) w[1].getY()));
-//            case MULTI_SCALAR_G2:
-//                return new QuarticElement<Element>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
-//                        ((CustomQuadraticElement) w[0].getX()).pair((CustomQuadraticElement) x), g[0].newOneElement(),
-//                        ((CustomQuadraticElement) w[0].getY()).pair((CustomQuadraticElement) x));
-//            case QUADRATIC:
-//                return new QuarticElement(w[0].pair(w[1]).powZn(x));
         }
         throw new NotImplementedException("ProblemType not covered: " + type);
     }

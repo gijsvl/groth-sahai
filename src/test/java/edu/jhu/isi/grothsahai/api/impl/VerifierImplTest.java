@@ -15,16 +15,17 @@ import static org.springframework.util.Assert.notNull;
 public class VerifierImplTest extends BaseTest {
     @Test
     public void canCreateVerifier() {
-        final Verifier verifier = new VerifierImpl();
+        final CommonReferenceString crs = null;
+        final Verifier verifier = new VerifierImpl(crs);
         notNull(verifier);
     }
 
     @Test(expected = NullPointerException.class)
     public void testVerify() {
-        final Verifier verifier = new VerifierImpl();
         final CommonReferenceString crs = null;
+        final Verifier verifier = new VerifierImpl(crs);
         final Statement statement = null;
         final Proof proof = null;
-        isTrue(!verifier.verify(crs, Arrays.asList(statement), proof));
+        isTrue(!verifier.verify(Arrays.asList(statement), proof));
     }
 }

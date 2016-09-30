@@ -10,7 +10,7 @@ public class QuarticElement<E extends Element> extends ImmutableQuadraticElement
     private Element z;
 
     public QuarticElement(final QuadraticField field, final E w, final E x, final E y, final E z) {
-        super(new QuadraticElement<Element>(field));
+        super(new QuadraticElement<>(field));
         this.w = w;
         this.x = x;
         this.y = y;
@@ -31,6 +31,10 @@ public class QuarticElement<E extends Element> extends ImmutableQuadraticElement
         this.x = element.getX();
         this.y = element.getY();
         this.z = element.getZ();
+    }
+
+    public QuarticElement(final QuadraticField field) {
+        super(new QuadraticElement<>(field));
     }
 
     public Element getW() {

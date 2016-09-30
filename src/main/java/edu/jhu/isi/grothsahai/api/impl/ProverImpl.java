@@ -17,23 +17,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProverImpl implements Prover {
-    public Proof proof(final CommonReferenceString crs, final List<Statement> statements, final Witness witness) {
+    private CommonReferenceStringImpl crsImpl;
+
+    public ProverImpl(final CommonReferenceString crs) {
+        this.crsImpl = (CommonReferenceStringImpl) crs;
+    }
+
+    public Proof proof(final List<Statement> statements, final Witness witness) {
         final WitnessImpl witnessImpl = (WitnessImpl) witness;
-        final CommonReferenceStringImpl crsImpl = (CommonReferenceStringImpl) crs;
 
         final Matrix R = Matrix.random(crsImpl.getZr(), witnessImpl.getX().getLength(), 2);
         final Matrix S = Matrix.random(crsImpl.getZr(), witnessImpl.getY().getLength(), 2);
         final Vector c = R != null ? crsImpl.iota(1, witnessImpl.getX()).add(R.multiply(crsImpl.getU1())) : null;
         final Vector d = S != null ? crsImpl.iota(2, witnessImpl.getY()).add(S.multiply(crsImpl.getU2())) : null;
 
-        final ArrayList<SingleProof> proofs = new ArrayList<SingleProof>();
+        final ArrayList<SingleProof> proofs = new ArrayList<>();
         for (final Statement statement : statements) {
-            proofs.add(getSingleProof((StatementImpl) statement, witnessImpl, crsImpl, R, S));
+            proofs.add(getSingleProof((StatementImpl) statement, witnessImpl, R, S));
         }
         return new ProofImpl(c, d, proofs);
     }
 
-    private SingleProof getSingleProof(final StatementImpl statementImpl, final WitnessImpl witnessImpl, final CommonReferenceStringImpl crsImpl, final Matrix R, final Matrix S) {
+    private SingleProof getSingleProof(final StatementImpl statementImpl, final WitnessImpl witnessImpl, final Matrix R, final Matrix S) {
         final Matrix T = Matrix.random(crsImpl.getZr(), 2, 2);
         Vector pi;
         if (R != null) {

@@ -1,6 +1,5 @@
 package edu.jhu.isi.grothsahai.api;
 
-import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
@@ -8,5 +7,5 @@ import edu.jhu.isi.grothsahai.entities.Witness;
 import java.util.List;
 
 public interface Prover {
-    Proof proof(CommonReferenceString crs, List<Statement> statements, Witness witness);
+    Proof proof(List<Statement> statements, Witness witness);
 }

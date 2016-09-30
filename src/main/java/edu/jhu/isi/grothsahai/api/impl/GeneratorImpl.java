@@ -6,7 +6,7 @@ import edu.jhu.isi.grothsahai.entities.Statement;
 import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.entities.impl.CommonReferenceStringImpl;
 import edu.jhu.isi.grothsahai.entities.impl.Matrix;
-import edu.jhu.isi.grothsahai.entities.impl.Pair;
+import edu.jhu.isi.grothsahai.entities.impl.StatementAndWitness;
 import edu.jhu.isi.grothsahai.entities.impl.StatementImpl;
 import edu.jhu.isi.grothsahai.entities.impl.Vector;
 import edu.jhu.isi.grothsahai.entities.impl.WitnessImpl;
@@ -39,7 +39,7 @@ public class GeneratorImpl implements Generator {
         return CommonReferenceStringImpl.generate(pairing);
     }
 
-    public Pair<List<Statement>, Witness> generateStatementAndWitness(final Pairing pairing) {
+    public StatementAndWitness generateStatementAndWitness(final Pairing pairing) {
         if (role == Role.VERIFIER) {
             throw new IllegalStateException("The verifier should not create a statement witness pair, " +
                     "but should receive the statement from the prover at generation time.");
@@ -49,7 +49,7 @@ public class GeneratorImpl implements Generator {
         return generateStatementAndWitness(pairing, aLength, bLength, 1);
     }
 
-    public Pair<List<Statement>, Witness> generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength, final int nrOfStatements) {
+    public StatementAndWitness generateStatementAndWitness(final Pairing pairing, final int aLength, final int bLength, final int nrOfStatements) {
         Element[] yElements = new Element[aLength];
         Element[] xElements = new Element[bLength];
         for (int i = 0; i < aLength; i++) {
@@ -67,7 +67,7 @@ public class GeneratorImpl implements Generator {
         }
         final Witness witness = new WitnessImpl(x, y);
 
-        return new Pair<List<Statement>, Witness>(statements, witness);
+        return new StatementAndWitness(statements, witness);
     }
 
     private Statement createStatement(final Pairing pairing, final int aLength, final int bLength, final Vector x, final Vector y) {

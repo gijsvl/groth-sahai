@@ -9,6 +9,9 @@ public class SingleProof {
         this.theta = theta;
     }
 
+    public SingleProof() {
+    }
+
     public Vector getPi() {
         return pi;
     }

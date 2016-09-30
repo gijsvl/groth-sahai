@@ -1,7 +1,9 @@
 package edu.jhu.isi.grothsahai.api;
 
 import edu.jhu.isi.grothsahai.BaseTest;
+import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.enums.Role;
+import it.unisa.dia.gas.jpbc.Pairing;
 import org.junit.Test;
 
 import static org.springframework.util.Assert.notNull;
@@ -28,14 +30,20 @@ public class NIZKFactoryTest extends BaseTest {
 
     @Test
     public void createProver() throws Exception {
-        final Prover prover = NIZKFactory.createProver();
+        final Generator generator = NIZKFactory.createGenerator(Role.VERIFIER);
+        Pairing pairing = generator.generatePairing();
+        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final Prover prover = NIZKFactory.createProver(crs);
 
         notNull(prover);
     }
 
     @Test
     public void createVerifier() throws Exception {
-        final Verifier verifier = NIZKFactory.createVerifier();
+        final Generator generator = NIZKFactory.createGenerator(Role.VERIFIER);
+        Pairing pairing = generator.generatePairing();
+        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final Verifier verifier = NIZKFactory.createVerifier(crs);
 
         notNull(verifier);
     }
