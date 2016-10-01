@@ -5,6 +5,8 @@ import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -19,14 +21,14 @@ public class GrothSahaiIT {
     private Prover prover;
     private Verifier verifier;
     private Pairing pairing;
-    private CommonReferenceString crs;
 
     @Before
     public void setUp() throws Exception {
         generator = NIZKFactory.createGenerator(Role.PROVER);
 
-        pairing = generator.generatePairing();
-        crs = generator.generateCRS(pairing);
+        final PairingParameters pairingParameters = generator.generatePairingParams();
+        pairing = PairingFactory.getPairing(pairingParameters);
+        final CommonReferenceString crs = generator.generateCRS(pairingParameters);
         prover = NIZKFactory.createProver(crs);
         verifier = NIZKFactory.createVerifier(crs);
     }
@@ -56,8 +58,7 @@ public class GrothSahaiIT {
     public void testInvalidProof() throws Exception {
         final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing);
         final Proof proof = prover.proof(statementWitnessPair.getStatement(), statementWitnessPair.getWitness());
-        final Proof proofImpl = (Proof) proof;
-        ReflectionTestUtils.setField(proof, "c", proofImpl.getC().add(proofImpl.getC()));
+        ReflectionTestUtils.setField(proof, "c", proof.getC().add(proof.getC()));
         isTrue(!verifier.verify(statementWitnessPair.getStatement(), proof));
     }
 

@@ -12,7 +12,6 @@ import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.jpbc.PairingParametersGenerator;
-import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import it.unisa.dia.gas.plaf.jpbc.pbc.curve.PBCTypeFCurveGenerator;
 
 import java.util.ArrayList;
@@ -25,15 +24,14 @@ public class GeneratorImpl implements Generator {
         this.role = role;
     }
 
-    public Pairing generatePairing() {
+    public PairingParameters generatePairingParams() {
         final int rBits = 256;
         final PairingParametersGenerator parametersGenerator = new PBCTypeFCurveGenerator(rBits);
-        final PairingParameters params = parametersGenerator.generate();
-        return PairingFactory.getPairing(params);
+        return parametersGenerator.generate();
     }
 
-    public CommonReferenceString generateCRS(final Pairing pairing) {
-        return CommonReferenceString.generate(pairing);
+    public CommonReferenceString generateCRS(final PairingParameters pairingParams) {
+        return CommonReferenceString.generate(pairingParams);
     }
 
     public StatementAndWitness generateStatementAndWitness(final Pairing pairing) {

@@ -1,18 +1,26 @@
 package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.BaseTest;
-import edu.jhu.isi.grothsahai.entities.Matrix;
-import edu.jhu.isi.grothsahai.entities.Vector;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class MatrixTest extends BaseTest {
+    private Pairing pairing;
+
+    @Before
+    public void setUp() throws Exception {
+        final PairingParameters pairingParams = createPairingParams();
+        pairing = PairingFactory.getPairing(pairingParams);
+    }
+
     @Test
     public void testRandom() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix random = Matrix.random(pairing.getG1(), rows, cols);
@@ -24,7 +32,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testRandom_noRows() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 0;
 
@@ -33,7 +40,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testRandom_noCols() {
-        final Pairing pairing = createPairing();
         final int cols = 0;
         final int rows = 2;
 
@@ -42,7 +48,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testGetNumberOfCols() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix random = Matrix.random(pairing.getG1(), rows, cols);
@@ -52,7 +57,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testGetNumberOfRows() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix random = Matrix.random(pairing.getG1(), rows, cols);
@@ -62,7 +66,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testTranspose() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix random = Matrix.random(pairing.getG1(), rows, cols);
@@ -75,7 +78,6 @@ public class MatrixTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testMultiply_wrongDimensions() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix m1 = Matrix.random(pairing.getG1(), rows, cols);
@@ -86,7 +88,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testMultiply() {
-        final Pairing pairing = createPairing();
         final int cols = 4;
         final int rows = 2;
         final Matrix m1 = Matrix.random(pairing.getG1(), rows, 3);
@@ -102,7 +103,6 @@ public class MatrixTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testMultiplyVector_wrongDimensions() {
-        final Pairing pairing = createPairing();
         final int cols = 3;
         final int rows = 2;
         final Matrix m = Matrix.random(pairing.getZr(), rows, cols);
@@ -113,7 +113,6 @@ public class MatrixTest extends BaseTest {
 
     @Test
     public void testMultiplyVector() {
-        final Pairing pairing = createPairing();
         final int cols = 4;
         final int rows = 2;
         final Matrix m = Matrix.random(pairing.getZr(), rows, cols);

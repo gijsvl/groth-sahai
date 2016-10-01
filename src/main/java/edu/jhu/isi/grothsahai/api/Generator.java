@@ -3,11 +3,12 @@ package edu.jhu.isi.grothsahai.api;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
 
 public interface Generator {
-    Pairing generatePairing();
+    PairingParameters generatePairingParams();
 
-    CommonReferenceString generateCRS(final Pairing pairing);
+    CommonReferenceString generateCRS(final PairingParameters pairing);
 
     StatementAndWitness generateStatementAndWitness(final Pairing pairing);
 

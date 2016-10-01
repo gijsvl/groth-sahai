@@ -5,37 +5,36 @@ import edu.jhu.isi.grothsahai.exceptions.NotImplementedException;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 import it.unisa.dia.gas.plaf.jpbc.field.z.ZrField;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class CommonReferenceString {
-    private final ZrField zr;
+    private final PairingParameters pairingParams;
     private final QuadraticField[] b;
     private final Field[] g;
-    private final CustomQuadraticElement[] w = new CustomQuadraticElement[2];
     private final QuadraticElement[][] u = new QuadraticElement[2][2];
     private final Pairing pairing;
 
     private CommonReferenceString(final QuadraticElement u11, final QuadraticElement u12,
                                   final QuadraticElement u21, final QuadraticElement u22,
-                                  final Field zr, final Field[] g, final QuadraticField[] b,
-                                  final Pairing pairing) {
-        this.u[0][0] = u11;
-        this.u[0][1] = u12;
-        this.u[1][0] = u21;
-        this.u[1][1] = u22;
-        this.zr = (ZrField) zr;
+                                  final Field[] g, final QuadraticField[] b,
+                                  final Pairing pairing, final PairingParameters pairingParams) {
+        setU(u11, u12, u21, u22);
         this.g = g;
         this.b = b;
         this.pairing = pairing;
-        w[0] = new CustomQuadraticElement<>(b[1], g[1].newZeroElement().getImmutable(), u[0][1].getX(), pairing);
-        w[1] = new CustomQuadraticElement<>(b[2], g[2].newZeroElement().getImmutable(), u[1][1].getX(), pairing);
+        this.pairingParams = pairingParams;
     }
 
-    public static CommonReferenceString generate(final Pairing pairing) {
+    public static CommonReferenceString generate(final PairingParameters pairingParams) {
+        final Pairing pairing = PairingFactory.getPairing(pairingParams);
         final Field zr = pairing.getZr();
         final Field[] g = new Field[3];
         g[0] = pairing.getGT();
@@ -73,7 +72,7 @@ public class CommonReferenceString {
         final CustomQuadraticElement<Element> bigU21 = new CustomQuadraticElement<>(b[2], p2, q2, pairing);
         final CustomQuadraticElement<Element> bigU22 = new CustomQuadraticElement<>(b[2], u2, v2, pairing);
 
-        return new CommonReferenceString(bigU11, bigU12, bigU21, bigU22, zr, g, b, pairing);
+        return new CommonReferenceString(bigU11, bigU12, bigU21, bigU22, g, b, pairing, pairingParams);
     }
 
     public Vector iota(final int index, final Vector xs) {
@@ -126,7 +125,7 @@ public class CommonReferenceString {
     }
 
     public ZrField getZr() {
-        return zr;
+        return (ZrField) pairing.getZr();
     }
 
     public QuadraticField getB1() {
@@ -157,11 +156,44 @@ public class CommonReferenceString {
         return pairing;
     }
 
+    public PairingParameters getPairingParams() {
+        return pairingParams;
+    }
+
     private static Element newNonZeroNonOneElement(Field field) {
         Element returnElement;
         do {
             returnElement = field.newRandomElement();
         } while (returnElement.isZero() || returnElement.isOne());
         return returnElement.getImmutable();
+    }
+
+    public void setU(final QuadraticElement u11, final QuadraticElement u12,final QuadraticElement u21, final QuadraticElement u22) {
+        this.u[0][0] = u11;
+        this.u[0][1] = u12;
+        this.u[1][0] = u21;
+        this.u[1][1] = u22;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final CommonReferenceString that = (CommonReferenceString) o;
+        return Objects.equals(pairingParams, that.pairingParams) &&
+                Arrays.deepEquals(u, that.u);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pairingParams, u);
+    }
+
+    @Override
+    public String toString() {
+        return "CommonReferenceString{" +
+                "pairingParams=" + pairingParams +
+                ", u=" + Arrays.deepToString(u) +
+                '}';
     }
 }

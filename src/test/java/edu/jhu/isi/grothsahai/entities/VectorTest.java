@@ -1,13 +1,13 @@
 package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.BaseTest;
-import edu.jhu.isi.grothsahai.entities.CustomQuadraticElement;
-import edu.jhu.isi.grothsahai.entities.Vector;
 import it.unisa.dia.gas.jpbc.Element;
-import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.security.SecureRandom;
@@ -16,11 +16,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class VectorTest extends BaseTest {
+    private Pairing pairing;
+
+    @Before
+    public void setUp() throws Exception {
+        final PairingParameters pairingParams = createPairingParams();
+        pairing = PairingFactory.getPairing(pairingParams);
+    }
+
     @Test
     public void testGetNullVector() {
-        final Pairing pairing = createPairing();
         final Vector vector = Vector.getQuadraticNullVector(
-                new QuadraticField<Field, QuadraticElement>(new SecureRandom(), pairing.getG1()),
+                new QuadraticField<>(new SecureRandom(), pairing.getG1()),
                 pairing, 3);
 
         assertEquals(3, vector.getLength());
@@ -31,7 +38,6 @@ public class VectorTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testAdd_illegalDimensions() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
         final Vector vector2 = generateVector(2, pairing.getG1());
 
@@ -40,7 +46,6 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testAdd() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
         final Vector vector2 = generateVector(3, pairing.getG1());
 
@@ -53,7 +58,6 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testGetLength() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
 
         assertEquals(3, vector.getLength());
@@ -61,7 +65,6 @@ public class VectorTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testSub_illegalDimensions() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
         final Vector vector2 = generateVector(2, pairing.getG1());
 
@@ -70,7 +73,6 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testSub() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
         final Vector vector2 = generateVector(3, pairing.getG1());
 
@@ -83,7 +85,6 @@ public class VectorTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testPair_illegalDimensions() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, pairing.getG1());
         final Vector vector2 = generateVector(2, pairing.getG2());
 
@@ -92,7 +93,6 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testPair() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(2, pairing.getG1());
         final Vector vector2 = generateVector(2, pairing.getG2());
 
@@ -104,7 +104,6 @@ public class VectorTest extends BaseTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testPairInB_illegalDimensions() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(3, new QuadraticField(new SecureRandom(), pairing.getG1()));
         final Vector vector2 = generateVector(2, new QuadraticField(new SecureRandom(), pairing.getG2()));
 
@@ -113,7 +112,6 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testPairInB() {
-        final Pairing pairing = createPairing();
         final Vector vector = generateVector(2, new QuadraticField(new SecureRandom(), pairing.getG1()));
         final Vector vector2 = generateVector(2, new QuadraticField(new SecureRandom(), pairing.getG2()));
 

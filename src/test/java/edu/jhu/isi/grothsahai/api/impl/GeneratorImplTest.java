@@ -4,13 +4,13 @@ import edu.jhu.isi.grothsahai.BaseTest;
 import edu.jhu.isi.grothsahai.api.Generator;
 import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Matrix;
-import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import edu.jhu.isi.grothsahai.entities.Statement;
+import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import edu.jhu.isi.grothsahai.entities.Vector;
-import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.Element;
-import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class GeneratorImplTest extends BaseTest {
     public void testGeneratePairing() {
         final Generator generator = new GeneratorImpl(Role.PROVER);
 
-        final Pairing pairing = generator.generatePairing();
+        final PairingParameters pairing = generator.generatePairingParams();
         notNull(pairing);
     }
 
@@ -35,7 +35,7 @@ public class GeneratorImplTest extends BaseTest {
     public void testGenerateCRS() {
         final Generator generator = new GeneratorImpl(Role.PROVER);
 
-        final CommonReferenceString crs = generator.generateCRS(generator.generatePairing());
+        final CommonReferenceString crs = generator.generateCRS(generator.generatePairingParams());
         notNull(crs);
     }
 
@@ -43,25 +43,25 @@ public class GeneratorImplTest extends BaseTest {
     public void testGenerateStatementAndWitness_asVerifier() {
         final GeneratorImpl generator = new GeneratorImpl(Role.VERIFIER);
 
-        final Pairing pairing = generator.generatePairing();
-        generator.generateStatementAndWitness(pairing);
+        final PairingParameters pairingParams = generator.generatePairingParams();
+        generator.generateStatementAndWitness(PairingFactory.getPairing(pairingParams));
     }
 
     @Test
     public void testGenerateStatementAndWitness_asProver() {
         final GeneratorImpl generator = new GeneratorImpl(Role.PROVER);
 
-        final Pairing pairing = generator.generatePairing();
-        final CommonReferenceString crs = (CommonReferenceString) generator.generateCRS(pairing);
-        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing);
+        final PairingParameters pairing = generator.generatePairingParams();
+        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(crs.getPairing());
 
-        final Statement statement = (Statement) statementWitnessPair.getStatement().get(0);
+        final Statement statement = statementWitnessPair.getStatement().get(0);
         final Vector a = statement.getA();
         final Vector b = statement.getB();
         final Matrix gamma = statement.getGamma();
         final Element t = statement.getT();
-        final Vector x = ((Witness) statementWitnessPair.getWitness()).getX();
-        final Vector y = ((Witness) statementWitnessPair.getWitness()).getY();
+        final Vector x = statementWitnessPair.getWitness().getX();
+        final Vector y = statementWitnessPair.getWitness().getY();
 
         notNull(statementWitnessPair.getStatement());
         notNull(a);

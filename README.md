@@ -21,26 +21,26 @@ Generation:
 #!java
 
 final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
-final Prover prover = NIZKFactory.createProver();
-final Verifier verifier = NIZKFactory.createVerifier();
 
-final Pairing pairing = generator.generatePairing();
-final CommonReferenceString crs = generator.generateCRS(pairing);
-final Pair<Statement, Witness> statementWitnessPair = generator.generateStatementAndWitness(pairing);
+final PairingParameters pairingParameters = generator.generatePairingParams();
+final CommonReferenceString crs = generator.generateCRS(pairingParameters);
+final Prover prover = NIZKFactory.createProver(crs);
+final Verifier verifier = NIZKFactory.createVerifier(crs);
+final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(crs.getPairing());
 ```
 
 Proof:
 ```
 #!java
 
-final Proof proof = prover.proof(crs, Arrays.asList(statementWitnessPair.getLeft()), statementWitnessPair.getRight());
+final Proof proof = prover.proof(statementWitnessPair.getStatement(), statementWitnessPair.getWitness());
 ```
 
 Verifying:
 ```
 #!java
 
-verifier.verify(crs, Arrays.asList(statementWitnessPair.getLeft()), proof)
+verifier.verify(statementWitnessPair.getStatement(), proof)
 ```
 
 ### References ###

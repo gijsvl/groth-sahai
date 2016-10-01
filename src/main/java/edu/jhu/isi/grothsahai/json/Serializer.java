@@ -16,11 +16,17 @@ public class Serializer {
     private static GsonBuilder gsonBuilder = new GsonBuilder();
 
     public static String serializeCRS(final CommonReferenceString crs) {
-        return null;
+        final Gson gson = gsonBuilder
+                .registerTypeAdapter(CommonReferenceString.class, new CRSJsonSerializer())
+                .registerTypeAdapter(Element.class, new ElementJsonSerializer(crs))
+                .create();
+        return gson.toJson(crs);
     }
 
     public static CommonReferenceString deserializeCRS(final String crs) {
-        return null;
+        final Gson gson = gsonBuilder.registerTypeAdapter(CommonReferenceString.class, new CRSJsonSerializer())
+                .create();
+        return gson.fromJson(crs, CommonReferenceString.class);
     }
 
     public static String serializeStatementAndWitness(final StatementAndWitness statementWitnessPair, final CommonReferenceString crs) {
@@ -51,7 +57,9 @@ public class Serializer {
     private static class Statements {
         private List<Statement> statements = new ArrayList<>();
 
+        @SuppressWarnings("unused")
         public Statements() {
+            // Empty constructor for GSON serialization
         }
 
         Statements(final List<Statement> statements) {

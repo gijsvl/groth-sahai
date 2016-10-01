@@ -2,6 +2,7 @@ package edu.jhu.isi.grothsahai.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Proof {
     private Vector c;
@@ -27,5 +28,29 @@ public class Proof {
 
     public List<SingleProof> getProofs() {
         return new ArrayList<>(proofs);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Proof proof = (Proof) o;
+        return Objects.equals(c, proof.c) &&
+                Objects.equals(d, proof.d) &&
+                Objects.equals(proofs, proof.proofs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(c, d, proofs);
+    }
+
+    @Override
+    public String toString() {
+        return "Proof{" +
+                "c=" + c +
+                ", d=" + d +
+                ", proofs=" + proofs +
+                '}';
     }
 }

@@ -4,7 +4,7 @@ import edu.jhu.isi.grothsahai.entities.CommonReferenceString;
 import edu.jhu.isi.grothsahai.entities.Proof;
 import edu.jhu.isi.grothsahai.entities.StatementAndWitness;
 import edu.jhu.isi.grothsahai.enums.Role;
-import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -13,12 +13,12 @@ public class GrothSahaiPerformance {
     @Test
     public void testPerformance() {
         final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
-        final Pairing pairing = generator.generatePairing();
-        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final PairingParameters pairingParams = generator.generatePairingParams();
+        final CommonReferenceString crs = generator.generateCRS(pairingParams);
         final Prover prover = NIZKFactory.createProver(crs);
         final Verifier verifier = NIZKFactory.createVerifier(crs);
 
-        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1, 1);
+        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(crs.getPairing(), 1, 1, 1);
         executePerformanceTest(prover, verifier, statementWitnessPair);
     }
 
@@ -41,24 +41,24 @@ public class GrothSahaiPerformance {
     @Test
     public void testPerformance_onlyA() {
         final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
-        final Pairing pairing = generator.generatePairing();
-        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final PairingParameters pairingParams = generator.generatePairingParams();
+        final CommonReferenceString crs = generator.generateCRS(pairingParams);
         final Prover prover = NIZKFactory.createProver(crs);
         final Verifier verifier = NIZKFactory.createVerifier(crs);
 
-        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 0, 1);
+        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(crs.getPairing(), 1, 0, 1);
         executePerformanceTest(prover, verifier, statementWitnessPair);
     }
 
     @Test
     public void testPerformance_onlyB() {
         final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
-        final Pairing pairing = generator.generatePairing();
-        final CommonReferenceString crs = generator.generateCRS(pairing);
+        final PairingParameters pairingParams = generator.generatePairingParams();
+        final CommonReferenceString crs = generator.generateCRS(pairingParams);
         final Prover prover = NIZKFactory.createProver(crs);
         final Verifier verifier = NIZKFactory.createVerifier(crs);
 
-        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing, 0, 1, 1);
+        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(crs.getPairing(), 0, 1, 1);
         executePerformanceTest(prover, verifier, statementWitnessPair);
     }
 }
