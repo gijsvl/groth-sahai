@@ -6,5 +6,7 @@ import edu.jhu.isi.grothsahai.entities.Statement;
 import java.util.List;
 
 public interface Verifier {
-    Boolean verify(List<Statement> statements, Proof proof);
+    Boolean verify(final String statement, final String proof);
+
+    Boolean verify(final List<Statement> statements, final Proof proof);
 }

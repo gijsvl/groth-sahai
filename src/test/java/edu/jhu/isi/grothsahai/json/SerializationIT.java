@@ -21,11 +21,11 @@ import static org.springframework.util.Assert.isTrue;
 public class SerializationIT {
     @Test
     public void testProofDeserialization() throws Exception {
-        Generator generator = NIZKFactory.createGenerator(Role.PROVER);
-        PairingParameters pairingParams = generator.generatePairingParams();
+        final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+        final PairingParameters pairingParams = generator.generatePairingParams();
         final Pairing pairing = PairingFactory.getPairing(pairingParams);
         final CommonReferenceString crs = generator.generateCRS(pairingParams);
-        Prover prover = NIZKFactory.createProver(crs);
+        final Prover prover = NIZKFactory.createProver(crs);
 
         final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing, 1, 1, 1);
         final Proof proof = prover.proof(statementWitnessPair.getStatement(), statementWitnessPair.getWitness());
@@ -38,9 +38,32 @@ public class SerializationIT {
         final CommonReferenceString deserializedCRS = Serializer.deserializeCRS(serializedCRS);
         final List<Statement> deserializedStatement = Serializer.deserializeStatement(serializedStatement, deserializedCRS);
         final Proof deserializedProof = Serializer.deserializeProof(serializedProof, deserializedCRS);
-        Verifier verifier = NIZKFactory.createVerifier(deserializedCRS);
+        final Verifier verifier = NIZKFactory.createVerifier(deserializedCRS);
 
         isTrue(verifier.verify(deserializedStatement, deserializedProof));
+    }
 
+    @Test
+    public void testStringInterface() throws Exception {
+        final Generator generator = NIZKFactory.createGenerator(Role.PROVER);
+        final PairingParameters pairingParams = generator.generatePairingParams();
+        final Pairing pairing = PairingFactory.getPairing(pairingParams);
+        final CommonReferenceString crs = generator.generateCRS(pairingParams);
+        final String crsString = crs.getAsJson();
+        final Prover prover = NIZKFactory.createProver(crsString);
+
+        final StatementAndWitness statementWitnessPair = generator.generateStatementAndWitness(pairing);
+        final String statementWitnessPairString = statementWitnessPair.getAsJson(crs);
+        final Proof proof = prover.proof(statementWitnessPairString);
+        final String serializedProof = proof.getAsJson(crs);
+
+        final Proof proof2 = prover.proof(statementWitnessPair.getStatementAsJson(crs),
+                statementWitnessPair.getWitnessAsJson(crs));
+        final String serializedProof2 = proof2.getAsJson(crs);
+
+        final Verifier verifier = NIZKFactory.createVerifier(crsString);
+
+        isTrue(verifier.verify(statementWitnessPair.getStatementAsJson(crs), serializedProof));
+        isTrue(verifier.verify(statementWitnessPair.getStatementAsJson(crs), serializedProof2));
     }
 }

@@ -1,5 +1,7 @@
 package edu.jhu.isi.grothsahai.entities;
 
+import edu.jhu.isi.grothsahai.json.Serializer;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +12,22 @@ public class StatementAndWitness {
     public StatementAndWitness(final List<Statement> statement, final Witness witness) {
         this.statement = statement;
         this.witness = witness;
+    }
+
+    public static StatementAndWitness generateFromJson(final String statementAndWitness, final CommonReferenceString crs) {
+        return Serializer.deserializeStatementAndWitness(statementAndWitness, crs);
+    }
+
+    public String getAsJson(final CommonReferenceString crs) {
+        return Serializer.serializeStatementAndWitness(this, crs);
+    }
+
+    public String getStatementAsJson(final CommonReferenceString crs) {
+        return Serializer.serializeStatement(getStatement(), crs);
+    }
+
+    public String getWitnessAsJson(final CommonReferenceString crs) {
+        return Serializer.serializeWitness(getWitness(), crs);
     }
 
     public List<Statement> getStatement() {

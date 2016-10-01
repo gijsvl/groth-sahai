@@ -7,5 +7,9 @@ import edu.jhu.isi.grothsahai.entities.Witness;
 import java.util.List;
 
 public interface Prover {
-    Proof proof(List<Statement> statements, Witness witness);
+    Proof proof(final String statementAndWitness);
+
+    Proof proof(final String statement, final String witness);
+
+    Proof proof(final List<Statement> statements, final Witness witness);
 }

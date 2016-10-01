@@ -2,6 +2,7 @@ package edu.jhu.isi.grothsahai.entities;
 
 import edu.jhu.isi.grothsahai.enums.ProblemType;
 import edu.jhu.isi.grothsahai.exceptions.NotImplementedException;
+import edu.jhu.isi.grothsahai.json.Serializer;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
@@ -31,6 +32,14 @@ public class CommonReferenceString {
         this.b = b;
         this.pairing = pairing;
         this.pairingParams = pairingParams;
+    }
+
+    public static CommonReferenceString generateFromJson(final String crs) {
+        return Serializer.deserializeCRS(crs);
+    }
+
+    public String getAsJson() {
+        return Serializer.serializeCRS(this);
     }
 
     public static CommonReferenceString generate(final PairingParameters pairingParams) {

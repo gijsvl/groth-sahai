@@ -20,11 +20,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
-public class CRSJsonSerializer implements JsonSerializer<CommonReferenceString>, JsonDeserializer<CommonReferenceString> {
+class CRSJsonSerializer implements JsonSerializer<CommonReferenceString>, JsonDeserializer<CommonReferenceString> {
 
-    public static final String PAIRING_PARAMS = "pairingParams";
-    public static final String U = "u";
-    public static final String ELEMENTS = "elements";
+    private static final String PAIRING_PARAMS = "pairingParams";
+    private static final String U = "u";
+    private static final String ELEMENTS = "elements";
 
     @Override
     public CommonReferenceString deserialize(final JsonElement jsonElement, final Type type, final JsonDeserializationContext context) throws JsonParseException {

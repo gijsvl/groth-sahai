@@ -16,32 +16,32 @@ import org.apache.commons.codec.binary.Hex;
 
 import java.lang.reflect.Type;
 
-public class ElementJsonSerializer<E extends Element> implements JsonSerializer<E>, JsonDeserializer<E> {
+class ElementJsonSerializer<E extends Element> implements JsonSerializer<E>, JsonDeserializer<E> {
 
     private static final String VALUE = "value";
     private static final String TYPE = "type";
     private final CommonReferenceString crs;
 
-    public ElementJsonSerializer(final CommonReferenceString crs) {
+    ElementJsonSerializer(final CommonReferenceString crs) {
         this.crs = crs;
     }
 
     public JsonElement serialize(final E e, final Type type, final JsonSerializationContext context) {
         final JsonObject jsonObject = new JsonObject();
         final ElementType elementType;
-        if (e.getField().equals(crs.getG1())) {
+        if (FieldEquals.equals(e.getField(), crs.getG1())) {
             elementType = ElementType.G1;
-        } else if(e.getField().equals(crs.getG2())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getG2())) {
             elementType = ElementType.G2;
-        } else if(e.getField().equals(crs.getGT())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getGT())) {
             elementType = ElementType.GT;
-        } else if(e.getField().equals(crs.getB1())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getB1())) {
             elementType = ElementType.B1;
-        } else if(e.getField().equals(crs.getB2())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getB2())) {
             elementType = ElementType.B2;
-        } else if(e.getField().equals(crs.getBT())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getBT())) {
             elementType = ElementType.BT;
-        } else if(e.getField().equals(crs.getZr())) {
+        } else if(FieldEquals.equals(e.getField(), crs.getZr())) {
             elementType = ElementType.ZR;
         } else {
             throw new IllegalStateException("No such field");

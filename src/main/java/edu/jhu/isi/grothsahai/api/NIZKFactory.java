@@ -11,8 +11,16 @@ public class NIZKFactory {
         return new GeneratorImpl(role);
     }
 
+    public static Prover createProver(final String crs) {
+        return new ProverImpl(crs);
+    }
+
     public static Prover createProver(final CommonReferenceString crs) {
         return new ProverImpl(crs);
+    }
+
+    public static Verifier createVerifier(final String crs) {
+        return new VerifierImpl(crs);
     }
 
     public static Verifier createVerifier(final CommonReferenceString crs) {

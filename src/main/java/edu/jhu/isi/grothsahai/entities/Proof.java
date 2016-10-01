@@ -1,5 +1,7 @@
 package edu.jhu.isi.grothsahai.entities;
 
+import edu.jhu.isi.grothsahai.json.Serializer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +18,10 @@ public class Proof {
     }
 
     public Proof() {
+    }
+
+    public String getAsJson(final CommonReferenceString crs) {
+        return Serializer.serializeProof(this, crs);
     }
 
     public Vector getC() {
