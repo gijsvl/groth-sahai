@@ -48,10 +48,10 @@ public class QuarticElement<E extends Element> extends ImmutableQuadraticElement
     public QuarticElement add(final Element e) {
         final QuarticElement result = this.duplicate();
         QuarticElement element = (QuarticElement) e;
-        result.w.add(element.w);
-        result.x.add(element.x);
-        result.y.add(element.y);
-        result.z.add(element.z);
+        result.w = result.w.add(element.w);
+        result.x = result.x.add(element.x);
+        result.y = result.y.add(element.y);
+        result.z = result.z.add(element.z);
         return result;
     }
 

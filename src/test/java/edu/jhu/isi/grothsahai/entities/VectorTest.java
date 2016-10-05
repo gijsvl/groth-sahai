@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +27,7 @@ public class VectorTest extends BaseTest {
 
     @Test
     public void testGetNullVector() {
-        final Vector vector = Vector.getQuadraticNullVector(
+        final Vector vector = Vector.getQuadraticZeroVector(
                 new QuadraticField<>(new SecureRandom(), pairing.getG1()),
                 pairing, 3);
 
@@ -121,5 +122,26 @@ public class VectorTest extends BaseTest {
                 .pair(new CustomQuadraticElement((QuadraticElement) vector2.get(0), pairing))
                 .add(new CustomQuadraticElement((QuadraticElement) vector.get(1), pairing)
                         .pair(new CustomQuadraticElement((QuadraticElement) vector2.get(1), pairing))), pair);
+    }
+
+    @Test
+    public void testConcatVectors() throws Exception {
+        final Vector vector = generateVector(2, new QuadraticField(new SecureRandom(), pairing.getG1()));
+        final Vector vector2 = generateVector(2, new QuadraticField(new SecureRandom(), pairing.getG1()));
+
+        final Vector newVector = new Vector(vector, vector2);
+        assertTrue(Arrays.asList(newVector.getElements()).containsAll(Arrays.asList(vector.getElements())));
+        assertTrue(Arrays.asList(newVector.getElements()).containsAll(Arrays.asList(vector2.getElements())));
+    }
+
+    @Test
+    public void testGetZeroVector() throws Exception {
+        final int length = 3;
+        final Vector zeroVector = Vector.getZeroVector(length, pairing.getG1());
+
+        assertEquals(length, zeroVector.getLength());
+        for (final Element element : zeroVector.getElements()) {
+            assertTrue(element.isZero());
+        }
     }
 }

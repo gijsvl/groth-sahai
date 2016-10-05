@@ -23,8 +23,23 @@ public class Matrix {
         return new Matrix(elements);
     }
 
+    public static Matrix zero(final Field field, final int m, final int n) {
+        if (m == 0 || n == 0) {
+            return null;
+        }
+        Element[][] elements = new Element[m][n];
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++)
+                elements[i][j] = field.newZeroElement().getImmutable();
+        return new Matrix(elements);
+    }
+
     public Element get(final int rowIndex, final int colIndex) {
         return elements[rowIndex][colIndex];
+    }
+
+    public void set(final int rowIndex, final int colIndex, final Element element) {
+        elements[rowIndex][colIndex] = element;
     }
 
     public int getNumberOfCols() {

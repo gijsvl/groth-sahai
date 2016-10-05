@@ -97,14 +97,14 @@ public class CommonReferenceString {
         if (index != 1 && index != 2) {
             throw new IllegalArgumentException("Index must be 1 or 2.");
         }
-        return new CustomQuadraticElement<>(b[index], g[index].newZeroElement(), x, pairing);
+        return new CustomQuadraticElement<>(b[index], g[index].newZeroElement().getImmutable(), x, pairing);
     }
 
     public QuarticElement iotaT(final ProblemType type, final Element x) {
         switch (type) {
             case PAIRING_PRODUCT:
-                return new QuarticElement<>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement(),
-                        g[0].newOneElement(), g[0].newOneElement(), x);
+                return new QuarticElement<>((new QuadraticField(new SecureRandom(), g[0])), g[0].newOneElement().getImmutable(),
+                        g[0].newOneElement().getImmutable(), g[0].newOneElement().getImmutable(), x);
         }
         throw new NotImplementedException("ProblemType not covered: " + type);
     }

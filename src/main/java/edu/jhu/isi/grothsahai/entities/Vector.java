@@ -9,6 +9,7 @@ import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticField;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class Vector {
     private Element[] elements;
@@ -17,15 +18,30 @@ public class Vector {
         this.elements = elements;
     }
 
+    public Vector(final Vector... vectors) {
+        elements = Stream.of(vectors).map(Vector::getElements).flatMap(Stream::of).toArray(Element[]::new);
+    }
+
     public Vector() {
     }
 
-    public static Vector getQuadraticNullVector(final Field field, final Pairing pairing, final int size) {
+    public static Vector getQuadraticZeroVector(final Field field, final Pairing pairing, final int size) {
         final Element[] elements = new Element[size];
         for (int i = 0; i < size; i++) {
             elements[i] = new CustomQuadraticElement((QuadraticElement) field.newZeroElement(), pairing);
         }
         return new Vector(elements);
+    }
+
+    public static Vector getZeroVector(final int length, final Field field) {
+        final Element zeroElement = field.newZeroElement().getImmutable();
+        final Element[] elements = new Element[length];
+        Arrays.fill(elements, zeroElement);
+        return new Vector(elements);
+    }
+
+    Element[] getElements() {
+        return elements;
     }
 
     public Element get(final int i) {
