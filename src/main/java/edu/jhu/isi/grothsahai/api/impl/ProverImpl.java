@@ -49,6 +49,16 @@ public class ProverImpl implements Prover {
     }
 
     public StatementAndWitness createDisjunctionStatements(final List<Statement> satisfiedStatements, final List<Statement> unsatisfiedStatements, final Witness witness) {
+        satisfiedStatements.forEach(statement -> {
+            if (!statement.getT().isZero()) {
+                throw new IllegalStateException("T should be 0 when doing disjunctions");
+            }
+        });
+        unsatisfiedStatements.forEach(statement -> {
+            if (!statement.getT().isZero()) {
+                throw new IllegalStateException("T should be 0 when doing disjunctions");
+            }
+        });
         final int satXLength = witness.getX().getLength();
         final int satYLength = witness.getY().getLength();
         final int unXLength = unsatisfiedStatements.get(0).getB().getLength();
@@ -106,7 +116,6 @@ public class ProverImpl implements Prover {
                     gamma.set(2 * satXLength + unXLength + i, 2 + satYLength + j, statement.getGamma().get(i, j));
                 }
             }
-//            final Element t = statement.getT();
             final Element t = crs.getGT().newZeroElement().getImmutable();
             newStatements.add(new Statement(a, b, gamma, t));
         }

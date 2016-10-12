@@ -9,6 +9,7 @@ import edu.jhu.isi.grothsahai.entities.Witness;
 import edu.jhu.isi.grothsahai.enums.Role;
 import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.field.quadratic.QuadraticElement;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -39,6 +40,7 @@ public class ProverImplTest extends BaseTest {
     }
 
     @Test
+    @Ignore("Cannot do disjunctions without T being zero in statements")
     public void testProofDisjunction() {
         final PairingParameters pairing = new GeneratorImpl(Role.PROVER).generatePairingParams();
         final CommonReferenceString crs = CommonReferenceString.generate(pairing);

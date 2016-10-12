@@ -12,6 +12,7 @@ import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -54,6 +55,7 @@ public class GrothSahaiIT {
     }
 
     @Test
+    @Ignore("Cannot do disjunctions without T being zero in statements")
     public void testValidProof_disjunction() {
         final StatementAndWitness statementWitnessPair1 = generator.generateStatementAndWitness(pairing, 4, 3, 1);
         final StatementAndWitness statementWitnessPair2 = generator.generateStatementAndWitness(pairing, 6, 5, 2);
