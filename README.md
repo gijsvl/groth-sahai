@@ -1,4 +1,8 @@
 # README #
+<aside class="warning">
+This is an experimental library and is only at its first version. The API could still be updated in the near future.
+I cannot guarantee the security of this library, and one should not use this in production.
+</aside>
 
 An implementation of the Groth-Sahai NIZK protocol
 
@@ -51,3 +55,12 @@ Ghadafi, Essam, Smart, Nigel. P. and Warinschi, Bogdan, **Groth--Sahai Proofs Re
 Groth, Jens, **Simulation-Sound NIZK Proofs for a Practical Language and Constant Size Group Signatures**, *Advances in Cryptology -- ASIACRYPT 2006: 12th International Conference on the Theory and Application of Cryptology and Information Security, Shanghai, China, December 3-7, 2006. Proceedings (2006), Springer Berlin Heidelberg*
 
 Melissa Chase, Markulf Kohlweiss, Anna Lysyanskaya and Sarah Meiklejohn, **Malleable Proof Systems and Applications**, *Cryptology ePrint Archive, Report 2012/012 (2012)*
+
+### License ###
+Copyright (c) 2016 Gijs Van Laer
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
