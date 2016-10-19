@@ -1,10 +1,9 @@
 # README #
-<aside class="warning">
+An implementation of the Groth-Sahai NIZK protocol
+
+## ⚠ Warning ⚠ ##
 This is an experimental library and is only at its first version. The API could still be updated in the near future.
 I cannot guarantee the security of this library, and one should not use this in production.
-</aside>
-
-An implementation of the Groth-Sahai NIZK protocol
 
 ### Setup ###
 
